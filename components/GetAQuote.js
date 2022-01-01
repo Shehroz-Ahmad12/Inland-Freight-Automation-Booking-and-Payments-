@@ -38,7 +38,7 @@ export default function  GetAQuote ()  {
         containerStyle={{
           backgroundColor: 'white',
           height: 100,
-          width: '100%',
+          width: '90%',
         }}
         buttonStyle={{ padding: 10, color: 'black' }}
         selectedButtonStyle={{
@@ -140,7 +140,7 @@ export default function  GetAQuote ()  {
         containerStyle={{
           backgroundColor: 'white',
           height: 70,
-          width: '100%',
+          width: '90%',
         }}
         buttonStyle={{ padding: 10, color: 'black' }}
         selectedButtonStyle={{

@@ -26,14 +26,7 @@ export default function Payment ()  {
         </Text>
         <View style={{flexDirection:"row"}}>
         <TextInput
-          style={{
-            borderColor: '#066145',
-            borderWidth: 1,
-            padding: 5,
-            marginLeft: 10,
-            width: '80%',
-            borderRadius: 4,
-          }}
+          style={styles.textInput}
         />
          <Icon
             name='cc-visa'
@@ -43,14 +36,7 @@ export default function Payment ()  {
   
         <Text style={{ padding: 10 }}>Cardholder Name </Text>
     <TextInput
-          style={{
-            borderColor: '#066145',
-            borderWidth: 1,
-            padding: 5,
-            marginLeft: 10,
-            width: '100%',
-            borderRadius: 4,
-          }}
+          style={styles.textInput}
         />   
         <View style={{flexDirection:"row"}}>
         <Text style={{ padding: 10 }}>Expire Date </Text>
@@ -58,55 +44,73 @@ export default function Payment ()  {
         </View>
         <View style={{flexDirection: "row"}}>
         <TextInput
-          style={{
-            borderColor: '#066145',
-            borderWidth: 1,
-            padding: 5,
-            marginLeft: 10,
-            width: '30%',
-            borderRadius: 4,
-          }}
+          style={styles.textInput2}
         />
         <TextInput
-          style={{
-            borderColor: '#066145',
-            borderWidth: 1,
-            padding: 5,
-            marginLeft: 10,
-            width: '20%',
-            borderRadius: 4,
-          }}
+          style={styles.textInput2}
         />  
         
         </View>
         <CheckBox
           checkedColor="#0B9F72"
-          containerStyle={{
-            borderWidth: 0,
-            padding: 0,
-            backgroundColor: 'white',
-            marginTop: 20
-          }}
+          containerStyle={styles.checkBox}
           title="Save Card"
           checked={check1}
           onPress={() => setCheck1(!check1)}
         />
         
         <TouchableOpacity
-          style={{
-            backgroundColor: '#0B9F72',
-            padding: 10,
-            width: "70%",
-            borderRadius: 10,
-            alignSelf: 'center',
-            marginTop: 10,
-          }}>
-          <Text style={{ alignSelf: 'center', color: 'white' }}>Pay</Text>
+          style={styles.buttonStyle}>
+          <Text style={styles.buttonText}>Pay</Text>
         </TouchableOpacity>
       </View>
       </ScrollView>
     );
   };
+  
+  
+  const styles = StyleSheet.create({
+    textInput: {
+        borderColor: '#066145',
+        borderWidth: 1,
+        padding: 3,
+        marginLeft: 10,
+        width: '90%',
+        borderRadius: 4,
+      },
+      textInput2: {
+        borderColor: '#066145',
+        borderWidth: 1,
+        padding: 3,
+        marginLeft: 10,
+        width: '30%',
+        borderRadius: 4,
+      },
+    buttonStyle: {
+        backgroundColor: '#0B9F72',
+        padding: 10,
+        width: 100,
+        borderRadius: 10,
+        alignSelf: 'center',
+        marginTop: 20,
+      },
+      buttonText: {
+        alignSelf: 'center', color: 'white'
+      },
+      checkBox:{
+        
+            borderWidth: 0,
+            padding: 0,
+            backgroundColor: 'white',
+            marginTop: 20
+          
+      },
+    image: {
+      flex: 1,
+      justifyContent: 'center',
+    },
+  });
+  
   
   
   

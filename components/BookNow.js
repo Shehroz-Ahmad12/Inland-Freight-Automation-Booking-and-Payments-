@@ -3,23 +3,68 @@ import {Text, View, StyleSheet, ImageBackground,
   TouchableOpacity,
   TextInput,
   Picker,
-  ScrollView
+  ScrollView, Button, Alert
 } from 'react-native';
 import Constants from 'expo-constants';
 import { CheckBox, Icon, Input, ButtonGroup } from 'react-native-elements';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
+
+import DateTimePicker from '@react-native-community/datetimepicker';
+
+const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
 
 export default function BookNow ()  {
 
   const [selectedValue, setSelectedValue] = React.useState('');
+  const [date, setDate] = React.useState(new Date());
+  const [mode, setMode] = React.useState('date');
+  const [show, setShow] = React.useState(false);
+  const [bookingData, setBooking] =React.useState({PickupCity: '', PickUpAddress: '', DropoffCity: '', DropoffAddress: '',
+   Vehicle: '', Description: '', Weight: '', Offer: '', DateTime:date.toString()});
+
+  const clear= ()=>{
+    setBooking({PickupCity: '', PickUpAddress: '', DropoffCity: '', DropoffAddress: '',
+    Vehicle: '', Description: '', Weight: '', Offer: '', DateTime:date});  }
+
+  const postData = () => {
+    var requestOptions = {
+      method: 'POST',
+      body: JSON.stringify(bookingData),
+    };
+
+    fetch(`${FIREBASE_API_ENDPOINT}/bookings.json`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.log('error', error));
+  };
+
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+    setBooking({...bookingData, DateTime: currentDate})
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
+
 
   return (
     <ScrollView>
     <View style={{backgroundColor: "lightgrey", height: "100%"}}>
-    <View style={{ padding: 20, marginTop: 20, backgroundColor: "white", margin: 10}}>
+    <View style={{ padding: 20, marginTop: 20, backgroundColor: "white", margin: 20}}>
       <Text style={{ padding: 10 }}>Pickup City: </Text>
-      <TextInput
+      <TextInput onChangeText={(v)=> {setBooking({...bookingData, PickupCity: v});}}
         style={styles.textInput}
       />
       <Text style={{ padding: 10 }}>Pickup Address: </Text>
@@ -27,21 +72,26 @@ export default function BookNow ()  {
         multiline
         numberOfLines={4}
         style={[styles.textInput,{height: 70}]}
+        onChangeText={(v)=> {setBooking({...bookingData, PickUpAddress: v});}}
       />
 <Text style={{ padding: 10 }}>Dropoff City: </Text>
       <TextInput
         style={styles.textInput}
+        onChangeText={(v)=> {setBooking({...bookingData, DropoffCity: v});}}
       />
       <Text style={{ padding: 10 }}>Dropoff Address: </Text>
       <TextInput
         multiline
         numberOfLines={4}
-        style={[styles.textInput,{height: 70}]}/>
+        style={[styles.textInput,{height: 70}]}
+        onChangeText={(v)=> {setBooking({...bookingData, DropoffAddress: v});}}
+        />
+
       <Text style={{ padding: 10 }}>Select Vehicle: </Text>
       <Picker
         selectedValue={selectedValue}
         style={[styles.textInput,{fontSize:12}]}
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
+        onValueChange={(itemValue, itemIndex) => {setSelectedValue(itemValue); setBooking({...bookingData, Vehicle: itemValue});}}>
         <Picker.Item label="Please Specify" value="" />
         <Picker.Item label="Truck" value="truck" />
         <Picker.Item label="Shehzore" value="shehzore" />
@@ -53,9 +103,44 @@ export default function BookNow ()  {
       <TextInput
         multiline
         numberOfLines={4}
-        style={[styles.textInput,{height: 70}]}      />
+        style={[styles.textInput,{height: 70}]}   
+        onChangeText={(v)=> {setBooking({...bookingData, Description: v});}}   />
+      <Text style={{ padding: 10 }}>Approx. Weight (kgs): </Text>
+      <TextInput style={styles.textInput} keyboardType='numeric' onChangeText={(v)=> {setBooking({...bookingData, Weight: v});}}/>
+      <Text style={{ padding: 10 }}>Your Offer (Rs): </Text>
+      <TextInput style={styles.textInput} keyboardType='numeric' onChangeText={(v)=> {setBooking({...bookingData, Offer: v});}}/>
+
+      <TouchableOpacity style={[styles.textInput,{marginTop: 20}]} onPress={showDatepicker}><Text>Choose Date</Text></TouchableOpacity>
+        <TouchableOpacity style={[styles.textInput,{marginTop: 20}]} onPress={showTimepicker} ><Text>Choose Time</Text></TouchableOpacity>
+        <Text style={{padding: 10}}>{date.toString()}</Text>
+      {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={mode}
+          is24Hour={true}
+          display="default"
+          onChange={onChange}
+        />
+      )}
+
       <TouchableOpacity
-        style={styles.buttonStyle}>
+        style={styles.buttonStyle} onPress={()=>{ 
+          Alert.alert(
+            'Confirm Order',
+            "Are you sure?",
+            [
+              {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              },
+              { text: "Confirm", onPress: () => {postData(); clear();}}
+            ]
+          )
+          
+          }}>
+          
         <Text style={styles.buttonText} >Confirm</Text>
       </TouchableOpacity>
     </View>
