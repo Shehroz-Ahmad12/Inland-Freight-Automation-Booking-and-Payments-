@@ -18,6 +18,10 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 
+import { StripeProvider } from '@stripe/stripe-react-native';
+import { CardField, useConfirmPayment } from '@stripe/stripe-react-native';
+
+
 import logo from './assets/Falas.png'; 
 
 import Payment from './components/Payment';
@@ -34,7 +38,8 @@ import MyCompletedBookingsDriver from './components/MyCompletedBookingsDriver';
 import PendingPayments from './components/PendingPayments';
 import { Button } from 'react-native-elements/dist/buttons/Button';
 
-
+const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
+const PUBLISHABLE_KEY = "pk_test_51KEBKKEaKSJeoPtKDUVrGpCvY5CyR40zYsTbaFjbAIcv4ii8f2uY0t6omkYUPfvxzJvTaZLbhVO3FEFWTH7TbmJN00R6zJ0ytm"
 
 const FindBookings= ({navigation})=>{
   return (
@@ -192,6 +197,60 @@ const Profile = () => {
 
   return (<View><Button title="Click" onPress={postData}/></View>);
 };
+
+const CardPayment = ()=>{
+  const [name, setName] = React.useState();
+  const {confirmPayment, loading}= useConfirmPayment();
+
+  const handlePayments = async() => {
+    const response = await fetch(`${"http://localhost:19002"}/create-payment-intent`,{
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        paymentMethodType: 'card', 
+        currency: 'usd'
+      })
+    })
+    const {clientsecret}  = await response.json();
+    const {error, paymentIntent} = await confirmPayment(clientsecret,{
+      type: 'Card',
+      billingDetails: {name}
+    })
+    if(error){
+      Alert.alert(`Error code: ${error.code} `, error.message);
+    }else if(paymentIntent){
+      Alert.alert('Success', `Payment Successful: ${paymentIntent.id}`);
+    }
+    
+  }
+
+  return(
+    <StripeProvider publishableKey={PUBLISHABLE_KEY}>
+    <View>
+    <Text style={{ padding: 10 }}>Name: </Text>
+      <TextInput onChangeText={(v)=> {setName(v);}}
+        style={styles.textInput}
+      />
+      <CardField postalCodeEnabled={false} style={{width: "90%",height: 40, marginVertical: 30, marginLeft: 10}} 
+        cardStyle={{borderColor: "#066145", borderWidth: 1, borderRadius: 5}}
+      />
+      <TouchableOpacity style={{marginTop:20, 
+        padding:10, 
+        backgroundColor: "#0B9F72", 
+        width: 200, 
+        alignSelf:'center', 
+        borderRadius: 10}}
+        onPress={handlePayments}
+        disabled={loading}
+        >
+        <Text style={{alignSelf: "center", color: 'white'}}>Pay</Text>
+        </TouchableOpacity>
+    </View>
+    </StripeProvider>
+  )
+}
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -407,7 +466,7 @@ function MyDrawer() {
     <Drawer.Navigator>
       <Drawer.Screen name="Booking" component={BookingStack} />
       <Drawer.Screen name="Driver" component={DriverStack} />
-      <Drawer.Screen name="Payments" component={PaymentStack} />
+      <Drawer.Screen name="Payments" component={CardPayment} />
       <Drawer.Screen name="Profile" component={Profile} />
     </Drawer.Navigator>
   );
@@ -422,22 +481,32 @@ export default function App() {
 }
 
 
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ecf0f1',
-    padding: 8,
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
+  textInput: {
+      borderColor: '#066145',
+      borderWidth: 1,
+      padding: 3,
+      marginLeft: 10,
+      width: '90%',
+      borderRadius: 4,
+    },
+  buttonStyle: {
+      backgroundColor: '#0B9F72',
+      padding: 10,
+      width: 100,
+      borderRadius: 10,
+      alignSelf: 'center',
+      marginTop: 20,
+    },
+    buttonText: {
+      alignSelf: 'center', color: 'white'
+    },
   image: {
     flex: 1,
     justifyContent: 'center',
   },
 });
+
+
+
