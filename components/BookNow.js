@@ -23,7 +23,7 @@ export default function BookNow ()  {
 
   const clear= ()=>{
     setBooking({PickupCity: '', PickUpAddress: '', DropoffCity: '', DropoffAddress: '',
-    Vehicle: '', Description: '', Weight: '', Offer: '', DateTime:date});  }
+    Vehicle: '', Description: '', Weight: '', Offer: '', DateTime:date, Status: 'Pending'});  }
 
   const postData = () => {
     var requestOptions = {

@@ -22,13 +22,26 @@ import {
 
 const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
 
-export default function MyBookings ({ navigation }){
+export default function PendingPayments ({ navigation }){
     const [bookingData, setBookingData] = React.useState({});
   
     const getBookingsData = async () => {
       const response = await fetch(`${FIREBASE_API_ENDPOINT}/bookings.json`);
       const data = await response.json();
-      setBookingData(data);
+      var id=Object.keys(data);
+      console.log(data);
+
+      var pendingData={};
+      console.log(id);
+      for (let i=0;i<id.length;i++){
+          let key=id[i];
+          console.log(data[key].Status);
+            if(data[key].Status==="Completed"){
+                pendingData[key]=data[key];
+            }
+    }
+    console.log(pendingData);
+      setBookingData(pendingData);
       console.log(data);
       
     };
@@ -46,7 +59,7 @@ export default function MyBookings ({ navigation }){
             keyExtractor={(item, index) => index}
             data={Object.keys(bookingData)}
             renderItem={({ item, index }) => (
-              <TouchableOpacity style={{padding: 15, borderBottomColor:'grey', borderBottomWidth:1}} onPress={()=>{navigation.navigate('Booking Details', item)}}>
+              <TouchableOpacity style={{padding: 15, borderBottomColor:'grey', borderBottomWidth:1}} onPress={()=>{navigation.navigate('Payment Details', item)}}>
                 <View style={{flexDirection: 'row'}}>
                 <Text>{bookingData[item].DateTime.toString()}</Text>  
                 <Text style={{marginTop: 5, fontSize: 20, marginLeft: 100}}>{bookingData[item].Offer} Rs</Text>
