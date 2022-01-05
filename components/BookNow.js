@@ -73,6 +73,7 @@ export default function BookNow ({navigation})  {
     });
     console.log(result);
     setCitiesData(result);
+
   };
 
 
@@ -105,7 +106,7 @@ export default function BookNow ({navigation})  {
 
   const setDropOff = (item)=>{
     setDropOffCity(item);
-    setBooking({...bookingData, DropOffCity: item})
+    setBooking({...bookingData, DropoffCity: item})
     setModalVisible(!modalVisible);
   }
 
@@ -140,7 +141,8 @@ export default function BookNow ({navigation})  {
             <TouchableOpacity
               style={styles.countryLabel}
               onPress={() => {
-                isPickup?setPickup(item):setDropOff(item); 
+                isPickup?setPickup(item):setDropOff(item);
+                
               }}>
               <Text>{item}</Text>
             </TouchableOpacity>

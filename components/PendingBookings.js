@@ -61,6 +61,7 @@ export default function PendingBookings ({ navigation }){
             onRefresh={getBookingsData}
             keyExtractor={(item, index) => index}
             data={Object.keys(bookingData)}
+            ListEmptyComponent={<Text style={{fontSize:24, alignSelf: 'center', marginTop: 30}}>No Bookings Found</Text>}
             renderItem={({ item, index }) => (
               <TouchableOpacity style={{padding: 15, borderBottomColor:'grey', borderBottomWidth:1}} onPress={()=>{navigation.push('Booking Details', item)}}>
                 <View style={{flexDirection: 'row'}}>

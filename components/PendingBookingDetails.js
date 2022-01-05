@@ -20,7 +20,7 @@ import {
 
 const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
 
-export default function BookingDetails({navigation, route}){
+export default function PendingBookingDetails({navigation, route}){
     const id= route.params;
     const [bookingData, setBookingData]= React.useState({});
     const [driverData, setDriverData]= React.useState({});
@@ -30,11 +30,6 @@ export default function BookingDetails({navigation, route}){
       const response = await fetch(`${FIREBASE_API_ENDPOINT}/bookings/${id}.json`);
       const data = await response.json();
       setBookingData(data);
-      console.log(data.Driver);
-      const driverresponse = await fetch(`${FIREBASE_API_ENDPOINT}/drivers/${data.Driver}.json`);
-      const driData = await driverresponse.json();
-      console.log(driData);
-      setDriverData(driData);
 
     };
     const deleteData = () => {
@@ -70,12 +65,6 @@ export default function BookingDetails({navigation, route}){
                 <View style={{backgroundColor: 'white', padding: 10, margin: 2, marginHorizontal:10}}>
                 <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Description </Text>
                 <Text style={{fontSize: 20, marginLeft: 50, marginTop: 5}} >{Description}</Text>
-              </View>
-              <View style={{backgroundColor: 'white', padding: 10, margin: 2, marginHorizontal:10}}>
-                <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Driver </Text>
-                <Text style={{fontSize: 20, marginLeft: 50, marginTop: 5}} >{Name}</Text>
-                <Text style={{fontSize: 20, marginLeft: 50, marginTop: 5}} >{Contact}</Text>
-                <Text style={{fontSize: 20, marginLeft: 50, marginTop: 5}} >{VehicleNo}</Text>
               </View>
                 <View  style={{backgroundColor: 'white', padding: 10, margin: 2,  marginHorizontal:10,flexDirection: "row", alignItems: 'center'}}>
                 <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Vehicle Type </Text>

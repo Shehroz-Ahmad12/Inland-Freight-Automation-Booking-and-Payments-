@@ -20,12 +20,13 @@ import {
 
 const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
 
-export default function ApplyJob({navigation, route}){
+export default function CompletedBookingsDriverDetails({navigation, route}){
    
     const id= route.params.item;
+   
     const [bookingData, setBookingData]= React.useState({});
-    const{PickUpAddress, DropoffAddress, PickupCity, Description,DropoffCity,Status, Vehicle, Offer, Weight, Date, Time }=bookingData;
-
+    const{PickUpAddress, DropoffAddress, PickupCity, DropoffCity,Description, Status,Vehicle, Offer, Weight, Date, Time }=bookingData;
+    
     const getBookingsData = async () => {
       const response = await fetch(`${FIREBASE_API_ENDPOINT}/bookings/${id}.json`);
       const data = await response.json();
@@ -33,31 +34,21 @@ export default function ApplyJob({navigation, route}){
       console.log(data);
     };
 
-    const applyJob = ()=>{
-        const id = route.params.item;
-        const driverId =route.params.driverId;
-        var data= bookingData;
-        data["Status"]="In-Process";
-        data["Driver"]=driverId;
+    const deleteData = () => {
         var requestOptions = {
-          method: 'PATCH',
-          body: JSON.stringify(data),
-        
+          method: 'DELETE',
         };
     
         fetch(`${FIREBASE_API_ENDPOINT}/bookings/${id}.json`, requestOptions)
           .then((response) => response.json())
-          .then((result) => console.log(result))
+          .then((result) => console.log('Delete Response:', result))
           .catch((error) => console.log('error', error));
-    }
-  
+      };
+    
     React.useEffect(() => {
       getBookingsData();
     }, [setBookingData]);
   
-
-
-
     return(
       <View style={{backgroundColor: 'lightgrey', height: "100%"}}>
       <ScrollView>
@@ -88,17 +79,17 @@ export default function ApplyJob({navigation, route}){
                       <Text style={{fontSize: 16, marginLeft: 50, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Weight} kg</Text>
                     </View>
                       <TouchableOpacity onPress={()=>{Alert.alert(
-                    'Apply',
-                    "Are you sure you want to apply for this job?",
+                    'Delete Record',
+                    "Are you sure?",
                     [
                       {
                         text: "Cancel",
                         onPress: () => console.log("Cancel Pressed"),
                         style: "cancel"
                       },
-                      { text: "Confirm", onPress: () => {applyJob(); navigation.goBack();}}
+                      { text: "Confirm", onPress: () => {deleteData(); navigation.goBack();}}
                     ]
-                  )}} style={{marginTop:20 , padding:10 ,marginBottom: 20, backgroundColor: "#0B9F72", width: 200 ,alignSelf:'center',borderRadius: 5}}><Text style={{alignSelf: 'center', color: "white", fontWeight: "bold", fontSize: 18}}>Apply For Job</Text></TouchableOpacity>
+                  )}} style={{marginTop:20 ,marginBottom:20, padding:10 , backgroundColor: "#0B9F72", width: 200 ,alignSelf:'center',borderRadius: 5}}><Text style={{alignSelf: 'center', color: "white", fontWeight: "bold", fontSize: 18}}>Delete Record</Text></TouchableOpacity>
                
                </ScrollView>
                 </View>

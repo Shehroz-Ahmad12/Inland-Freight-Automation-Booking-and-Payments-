@@ -22,10 +22,10 @@ const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebasei
 
 export default function BookingDetailsDriver({navigation, route}){
    
-    const id= route.params;
+    const id= route.params.item;
    
     const [bookingData, setBookingData]= React.useState({});
-    const{PickUpAddress, DropoffAddress, PickupCity, DropoffCity, Vehicle, Offer, Weight, DateTime }=bookingData;
+    const{PickUpAddress, DropoffAddress, PickupCity, DropoffCity,Description, Status,Vehicle, Offer, Weight, Date, Time }=bookingData;
     
     const getBookingsData = async () => {
       const response = await fetch(`${FIREBASE_API_ENDPOINT}/bookings/${id}.json`);
@@ -35,7 +35,8 @@ export default function BookingDetailsDriver({navigation, route}){
     };
 
     const completeJob = ()=>{
-        const id = route.params;
+        const id = route.params.item;
+        const driverId = route.params.driverId;
         var data= bookingData;
         data["Status"]="Completed";
         var requestOptions = {
@@ -57,29 +58,49 @@ export default function BookingDetailsDriver({navigation, route}){
     }, [setBookingData]);
   
     return(
-        <View>
-          <View>
-            <Text style={{fontSize: 40, marginTop:20, alignSelf: "center", backgroundColor: "#066145", color: "white", borderRadius: 15, padding: 10}}>{Offer} Rs</Text>
-                <Text style={{fontSize: 15, alignSelf: "center", color: "#066145", borderRadius: 15, padding: 10}}>{DateTime}</Text>
-                <Text style={{fontSize: 20, padding: 5, marginLeft: 15, marginTop:20}}>Source: {PickupCity}, {PickUpAddress}</Text>
-                <Text style={{fontSize: 20, padding: 5, marginLeft: 15}}>Destination: {DropoffCity}, {DropoffAddress}</Text>
-                <Text style={{fontSize: 20, padding: 5, marginLeft: 15}}>Vehicle Type: {Vehicle}</Text>
-                <Text style={{fontSize: 20, padding: 5, marginLeft: 15}}>Weight: {Weight} kg</Text>
-                <Text style={{fontSize: 20, padding: 5, marginLeft: 15}}>Driver Details: </Text>
+      <View style={{backgroundColor: 'lightgrey', height: "100%"}}>
+      <ScrollView>
+                  <Text style={{fontSize: 40, marginTop:20, alignSelf: "center", backgroundColor: "#066145", color: "white", borderRadius: 15, padding: 10}}>{Offer} Rs</Text>
+                      <Text style={{fontSize: 16, alignSelf: "center", color: "#066145", borderRadius: 15, padding: 10,fontWeight: "bold" }}>{Date}, {Time}</Text>
+                      
+                      <View style={{backgroundColor: 'white', padding: 10, margin: 2, marginHorizontal:10}}>
+                      <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10 }}>Source </Text>
+                      <Text style={{fontSize: 20, marginLeft: 50, marginTop: 5}} >{PickupCity}, {PickUpAddress}</Text>
+                      
+                      <Text style={{fontSize: 20, fontWeight: "bold", marginTop: 10, marginLeft: 10, marginHorizontal:10}}>Desitination </Text>
+                      <Text style={{fontSize: 20, marginLeft: 50, marginTop: 5}} >{DropoffCity}, {DropoffAddress}</Text>
+                      </View>
+                      <View style={{backgroundColor: 'white', padding: 10, margin: 2, marginHorizontal:10}}>
+                      <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Description </Text>
+                      <Text style={{fontSize: 20, marginLeft: 50, marginTop: 5}} >{Description}</Text>
+                    </View>
+                      <View  style={{backgroundColor: 'white', padding: 10, margin: 2,  marginHorizontal:10,flexDirection: "row", alignItems: 'center'}}>
+                      <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Vehicle Type </Text>
+                      <Text style={{fontSize: 16, marginLeft: 50, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Vehicle}</Text>
+                    </View>
+                    <View  style={{backgroundColor: 'white', padding: 10, margin: 2, marginHorizontal:10, flexDirection: "row", alignItems: 'center'}}>
+                      <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Status </Text>
+                      <Text style={{fontSize: 16, marginLeft: 50, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Status}</Text>
+                    </View>
+                    <View  style={{backgroundColor: 'white', padding: 10, margin: 2 , marginHorizontal:10,flexDirection: "row", alignItems: 'center'}}>
+                      <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Weight </Text>
+                      <Text style={{fontSize: 16, marginLeft: 50, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Weight} kg</Text>
+                    </View>
+                      <TouchableOpacity onPress={()=>{Alert.alert(
+                    'Complete Job',
+                    "Are you sure?",
+                    [
+                      {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                      },
+                      { text: "Confirm", onPress: () => {completeJob(); navigation.goBack();}}
+                    ]
+                  )}} style={{marginTop:20 ,marginBottom:20, padding:10 , backgroundColor: "#0B9F72", width: 200 ,alignSelf:'center',borderRadius: 5}}><Text style={{alignSelf: 'center', color: "white", fontWeight: "bold", fontSize: 18}}>Complete Job</Text></TouchableOpacity>
+               
+               </ScrollView>
                 </View>
-                <TouchableOpacity onPress={()=>{Alert.alert(
-              'Complete Job',
-              "Are you sure?",
-              [
-                {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel"
-                },
-                { text: "Confirm", onPress: () => {completeJob(); }}
-              ]
-            )}} style={{marginTop:20 , padding:10 , backgroundColor: "#0B9F72", width: 200 ,alignSelf:'center',borderRadius: 5}}><Text style={{alignSelf: 'center', color: "white"}}>Complete Job</Text></TouchableOpacity>
-          </View>
     )
   }
   

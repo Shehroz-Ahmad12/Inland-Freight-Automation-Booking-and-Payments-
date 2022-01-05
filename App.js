@@ -36,17 +36,19 @@ import MyJobs from './components/MyJobs';
 import BookingDetailsDriver from './components/BookingDetailsDriver';
 import MyCompletedBookingsDriver from './components/MyCompletedBookingsDriver';
 import PendingPayments from './components/PendingPayments';
+import CompletedBookingsDriverDetails from './components/CompletedBookingsDriverDetails';
 import { Button } from 'react-native-elements/dist/buttons/Button';
 
 const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
 const PUBLISHABLE_KEY = "pk_test_51KEBKKEaKSJeoPtKDUVrGpCvY5CyR40zYsTbaFjbAIcv4ii8f2uY0t6omkYUPfvxzJvTaZLbhVO3FEFWTH7TbmJN00R6zJ0ytm"
 
 const FindBookings= ({navigation})=>{
+  const [driver, setDriver]= React.useState("-MsP64tYV3CF2Hnr8ofo");
   return (
     <ScrollView>
     <View >
       <Image
-        style={{width: 300, height: 300, alignSelf:"center", marginTop: 20, marginBottom: 20}}
+        style={{width: 350, height: 350, alignSelf:"center",  marginBottom: 5}}
         source={logo}
       />
       <View>
@@ -64,7 +66,7 @@ const FindBookings= ({navigation})=>{
             }}
             onPress={() => {
               console.log("Find Jobs")
-              navigation.push('Find Jobs')}}>
+              navigation.push('Find Jobs', driver)}}>
             <Text style={{fontSize: 20, alignSelf: 'center',color: "white", fontWeight: "bold"}}>Find Jobs</Text>
           </TouchableOpacity>
 
@@ -76,7 +78,7 @@ const FindBookings= ({navigation})=>{
               margin: 10
               
             }}
-            onPress={() => navigation.navigate('My Jobs')}>
+            onPress={() => navigation.push('My Jobs', driver)}>
             <Text style={{fontSize: 20, alignSelf: 'center',color: "white", fontWeight: "bold"}}>My Jobs</Text>
           </TouchableOpacity>
         </View>
@@ -85,11 +87,11 @@ const FindBookings= ({navigation})=>{
             style={{
               backgroundColor: '#0B9F72',
               padding: 40,
-              width: "45%",
+              width: "93%",
               margin: 10
 
             }}
-            onPress={()=>{navigation.navigate('My Completed Bookings')}}
+            onPress={()=>{navigation.push('My Completed Bookings Driver', driver)}}
             >
             <Text style={{fontSize: 20, alignSelf: 'center',color: "white", fontWeight: "bold"}}>My Completed Bookings</Text>
           </TouchableOpacity>
@@ -103,15 +105,12 @@ const FindBookings= ({navigation})=>{
 
 } 
 
-
-
-
-const Booking = ({ navigation }) => {
+const Booking = ({ navigation, route }) => {
   return (
     <ScrollView>
     <View >
       <Image
-        style={{width: 300, height: 300, alignSelf:"center", marginTop: 20, marginBottom: 20}}
+        style={{width: 350, height: 350, alignSelf:"center",  marginBottom: 5}}
         source={logo}
       />
       <View>
@@ -180,6 +179,11 @@ const Booking = ({ navigation }) => {
 const Profile = () => {
   
   const postData = () => {
+    var obj={
+      Name: "Sherry",
+      Username: "Sherry32",
+      Email: "shehrozahmad372@gmail.com"
+    }
     var requestOptions = {
       method: 'POST',
       body: JSON.stringify(
@@ -187,7 +191,7 @@ const Profile = () => {
         ),
     };
 
-    fetch(`${FIREBASE_API_ENDPOINT}/cities.json`, requestOptions)
+    fetch(`${FIREBASE_API_ENDPOINT}/customers.json`, requestOptions)
       .then((response) => response.json())
       .then((result) => console.log(result))
       .catch((error) => console.log('error', error));
@@ -396,7 +400,7 @@ function DriverStack() {
         }}
       />
       <Stack.Screen
-        name="My Completed Bookings"
+        name="My Completed Bookings Driver"
         component={MyCompletedBookingsDriver}
         options={{
           headerStyle: {
@@ -408,8 +412,8 @@ function DriverStack() {
           },
         }}
       />
-            <Stack.Screen
-        name="Booking Details"
+      <Stack.Screen
+        name="Booking Details Driver"
         component={BookingDetailsDriver}
         options={{
           headerStyle: {
@@ -420,8 +424,21 @@ function DriverStack() {
             fontWeight: 'bold',
           },
         }}
-      />
+      /><Stack.Screen
+      name="Completed Bookings Driver Details"
+      component={CompletedBookingsDriverDetails}
+      options={{
+        headerStyle: {
+          backgroundColor: '#066145',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
+    />
     </Stack.Navigator>
+    
   );
 }
 
