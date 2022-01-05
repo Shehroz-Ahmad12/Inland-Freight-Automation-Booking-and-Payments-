@@ -25,7 +25,7 @@ export default function ApplyJob({navigation, route}){
     const id= route.params;
    
     const [bookingData, setBookingData]= React.useState({});
-    const{PickUpAddress, DropoffAddress, PickupCity, DropoffCity, Vehicle, Offer, Weight, DateTime }=bookingData;
+    const{PickUpAddress, DropoffAddress, PickupCity, DropoffCity, Vehicle, Offer, Weight, Date, Time }=bookingData;
     
     const getBookingsData = async () => {
       const response = await fetch(`${FIREBASE_API_ENDPOINT}/bookings/${id}.json`);
@@ -57,7 +57,7 @@ export default function ApplyJob({navigation, route}){
         <View>
           <View>
             <Text style={{fontSize: 40, marginTop:20, alignSelf: "center", backgroundColor: "#066145", color: "white", borderRadius: 15, padding: 10}}>{Offer} Rs</Text>
-                <Text style={{fontSize: 15, alignSelf: "center", color: "#066145", borderRadius: 15, padding: 10}}>{DateTime}</Text>
+                <Text style={{fontSize: 15, alignSelf: "center", color: "#066145", borderRadius: 15, padding: 10}}>{Date}, {Time}</Text>
                 <Text style={{fontSize: 20, padding: 5, marginLeft: 15, marginTop:20}}>Source: {PickupCity}, {PickUpAddress}</Text>
                 <Text style={{fontSize: 20, padding: 5, marginLeft: 15}}>Destination: {DropoffCity}, {DropoffAddress}</Text>
                 <Text style={{fontSize: 20, padding: 5, marginLeft: 15}}>Vehicle Type: {Vehicle}</Text>

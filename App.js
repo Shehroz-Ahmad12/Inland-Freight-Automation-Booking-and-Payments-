@@ -46,7 +46,7 @@ const FindBookings= ({navigation})=>{
     <ScrollView>
     <View >
       <Image
-        style={{width: 250, height: 250, alignSelf:"center", marginTop: 20, marginBottom: 20}}
+        style={{width: 300, height: 300, alignSelf:"center", marginTop: 20, marginBottom: 20}}
         source={logo}
       />
       <View>
@@ -111,7 +111,7 @@ const Booking = ({ navigation }) => {
     <ScrollView>
     <View >
       <Image
-        style={{width: 250, height: 250, alignSelf:"center", marginTop: 20, marginBottom: 20}}
+        style={{width: 300, height: 300, alignSelf:"center", marginTop: 20, marginBottom: 20}}
         source={logo}
       />
       <View>
@@ -130,7 +130,7 @@ const Booking = ({ navigation }) => {
             onPress={() => {
               console.log("Booking")
               navigation.push('Book Now')}}>
-            <Text style={{fontSize: 20, alignSelf: 'center',color: "white", fontWeight: "bold"}}>Book Now</Text>
+            <Text style={{fontSize: 20, alignSelf: 'center',color: "white", fontWeight: "bold", fontFamily:"lucida grande"}}>Schedule Booking</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -178,18 +178,16 @@ const Booking = ({ navigation }) => {
 };
 
 const Profile = () => {
+  
   const postData = () => {
     var requestOptions = {
       method: 'POST',
-      body: JSON.stringify({
-        Name: 'Shehroz Ahmad',
-        Vehicle: 'Mazda',
-        VehicleNo: 'MQ-234',
-        Contact: '03153234545'
-      }),
+      body: JSON.stringify(
+        obj
+        ),
     };
 
-    fetch(`${FIREBASE_API_ENDPOINT}/drivers.json`, requestOptions)
+    fetch(`${FIREBASE_API_ENDPOINT}/cities.json`, requestOptions)
       .then((response) => response.json())
       .then((result) => console.log(result))
       .catch((error) => console.log('error', error));
@@ -466,7 +464,7 @@ function MyDrawer() {
     <Drawer.Navigator>
       <Drawer.Screen name="Booking" component={BookingStack} />
       <Drawer.Screen name="Driver" component={DriverStack} />
-      <Drawer.Screen name="Payments" component={CardPayment} />
+      <Drawer.Screen name="Payments" component={PaymentStack} />
       <Drawer.Screen name="Profile" component={Profile} />
     </Drawer.Navigator>
   );

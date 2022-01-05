@@ -46,13 +46,17 @@ export default function MyBookings ({ navigation }){
             keyExtractor={(item, index) => index}
             data={Object.keys(bookingData)}
             renderItem={({ item, index }) => (
-              <TouchableOpacity style={{padding: 15, borderBottomColor:'grey', borderBottomWidth:1}} onPress={()=>{navigation.navigate('Booking Details', item)}}>
+              <TouchableOpacity style={{padding: 15, borderBottomColor:'grey', borderBottomWidth:1}} onPress={()=>{navigation.push('Booking Details', item)}}>
                 <View style={{flexDirection: 'row'}}>
-                <Text>{bookingData[item].DateTime.toString()}</Text>  
-                <Text style={{marginTop: 5, fontSize: 20, marginLeft: 100}}>{bookingData[item].Offer} Rs</Text>
-                </View>
-                <Text>Source: {bookingData[item].PickupCity}, {bookingData[item].PickUpAddress}</Text>
+                <View>
+                <Text>{bookingData[item].Date},{bookingData[item].Time}</Text> 
+                <Text >Source: {bookingData[item].PickupCity}, {bookingData[item].PickUpAddress}</Text>
                 <Text>Destination: {bookingData[item].DropoffCity}, {bookingData[item].DropoffAddress}</Text>
+                </View>
+                </View>
+                <View>
+                <Text style={{marginTop: 5, fontSize: 20, alignSelf:'flex-end', fontWeight: "bold"}}>{bookingData[item].Offer} Rs</Text>
+                </View>
               </TouchableOpacity>
             )}
           />
