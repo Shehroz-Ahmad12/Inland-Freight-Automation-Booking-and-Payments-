@@ -28,7 +28,19 @@ export default function MyBookings ({ navigation }){
     const getBookingsData = async () => {
       const response = await fetch(`${FIREBASE_API_ENDPOINT}/bookings.json`);
       const data = await response.json();
-      setBookingData(data);
+
+      var id=Object.keys(data);
+      var newData={};
+      console.log(id);
+      for (let i=0;i<id.length;i++){
+          let key=id[i];
+          console.log(data[key].Status);
+            if(data[key].Status!=="Pending"){
+                newData[key]=data[key];
+            }
+    }
+
+      setBookingData(newData);
       console.log(data);
       
     };

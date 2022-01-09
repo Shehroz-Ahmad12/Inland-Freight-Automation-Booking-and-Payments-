@@ -23,9 +23,8 @@ const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebasei
 export default function PendingBookingDetails({navigation, route}){
     const id= route.params;
     const [bookingData, setBookingData]= React.useState({});
-    const [driverData, setDriverData]= React.useState({});
     const{PickUpAddress, DropoffAddress, PickupCity,  DropoffCity, Description,Vehicle, Offer, Weight, Status,Date, Time }=bookingData;
-    const {Name , Contact, VehicleNo}= driverData;
+    
     const getBookingsData = async () => {
       const response = await fetch(`${FIREBASE_API_ENDPOINT}/bookings/${id}.json`);
       const data = await response.json();

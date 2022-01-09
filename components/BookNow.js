@@ -11,7 +11,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
 
 export default function BookNow ({navigation})  {
-  
   const [isPickup, setIsPickup]= React.useState(true);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [getText, setText] = React.useState();
@@ -23,8 +22,10 @@ export default function BookNow ({navigation})  {
   const [show, setShow] = React.useState(false);
   const[citiesData, setCitiesData]= React.useState();
   
+  const CUSTOMER = "-MsgaaNM6XCecZ6niCZd";
+
   const [bookingData, setBooking] =React.useState({PickupCity: '', PickUpAddress: '', DropoffCity: '', DropoffAddress: '',
-   Vehicle: '', Description: '', Weight: '', Offer: '', Date:date.toDateString(), Time:date.toTimeString(), Status: 'Pending'});
+   Vehicle: '', Description: '', Weight: '', Offer: '', Date:date.toDateString(), Time:date.toTimeString(), Status: 'Pending', Customer: CUSTOMER});
 
   const clear= ()=>{
     setBooking({PickupCity: '', PickUpAddress: '', DropoffCity: '', DropoffAddress: '',

@@ -1,10 +1,16 @@
 import * as React from 'react';
-import {Text, View, StyleSheet, ImageBackground,
+import {
+  Text,
+  View,
+  StyleSheet,
+  ImageBackground,
   TouchableOpacity,
   TextInput,
   Picker,
   Image,
-  ScrollView, FlatList, Alert
+  ScrollView,
+  FlatList,
+  Alert,
 } from 'react-native';
 import Constants from 'expo-constants';
 import { CheckBox, Icon, Input, ButtonGroup } from 'react-native-elements';
@@ -21,8 +27,7 @@ import {
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { CardField, useConfirmPayment } from '@stripe/stripe-react-native';
 
-
-import logo from './assets/Falas.png'; 
+import logo from './assets/Falas.png';
 
 import Payment from './components/Payment';
 import GetAQuote from './components/GetAQuote';
@@ -37,222 +42,150 @@ import BookingDetailsDriver from './components/BookingDetailsDriver';
 import MyCompletedBookingsDriver from './components/MyCompletedBookingsDriver';
 import PendingPayments from './components/PendingPayments';
 import CompletedBookingsDriverDetails from './components/CompletedBookingsDriverDetails';
+import PendingBookingDetails from './components/PendingBookingDetails';
 import { Button } from 'react-native-elements/dist/buttons/Button';
 
-const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
-const PUBLISHABLE_KEY = "pk_test_51KEBKKEaKSJeoPtKDUVrGpCvY5CyR40zYsTbaFjbAIcv4ii8f2uY0t6omkYUPfvxzJvTaZLbhVO3FEFWTH7TbmJN00R6zJ0ytm"
+const FIREBASE_API_ENDPOINT =
+  'https://freight-automation-default-rtdb.firebaseio.com/';
 
-const FindBookings= ({navigation})=>{
-  const [driver, setDriver]= React.useState("-MsP64tYV3CF2Hnr8ofo");
-  return (
-    <ScrollView>
-    <View >
-      <Image
-        style={{width: 350, height: 350, alignSelf:"center",  marginBottom: 5}}
-        source={logo}
-      />
-      <View>
 
-       <View style={{marign: 50, alignContent: "center", justifyContent: 'center', alignItems: 'center'}}> 
-        <View style={{ flexDirection: 'row' }}>
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#0B9F72',
-              padding: 40,
-              width: "45%",
-              margin: 10
-              
-              
-            }}
-            onPress={() => {
-              console.log("Find Jobs")
-              navigation.push('Find Jobs', driver)}}>
-            <Text style={{fontSize: 20, alignSelf: 'center',color: "white", fontWeight: "bold"}}>Find Jobs</Text>
-          </TouchableOpacity>
 
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#0B9F72',
-              padding: 40,
-              width: "45%",
-              margin: 10
-              
-            }}
-            onPress={() => navigation.push('My Jobs', driver)}>
-            <Text style={{fontSize: 20, alignSelf: 'center',color: "white", fontWeight: "bold"}}>My Jobs</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#0B9F72',
-              padding: 40,
-              width: "93%",
-              margin: 10
 
-            }}
-            onPress={()=>{navigation.push('My Completed Bookings Driver', driver)}}
-            >
-            <Text style={{fontSize: 20, alignSelf: 'center',color: "white", fontWeight: "bold"}}>My Completed Bookings</Text>
-          </TouchableOpacity>
-
-        </View>
-        </View>
-      </View>
-    </View>
-    </ScrollView>
-  );
-
-} 
 
 const Booking = ({ navigation, route }) => {
   return (
     <ScrollView>
-    <View >
-      <Image
-        style={{width: 350, height: 350, alignSelf:"center",  marginBottom: 5}}
-        source={logo}
-      />
       <View>
-
-       <View style={{marign: 50, alignContent: "center", justifyContent: 'center', alignItems: 'center'}}> 
-        <View style={{ flexDirection: 'row' }}>
-          <TouchableOpacity
+        <Image
+          style={{
+            width: 350,
+            height: 350,
+            alignSelf: 'center',
+            marginBottom: 5,
+          }}
+          source={logo}
+        />
+        <View>
+          <View
             style={{
-              backgroundColor: '#0B9F72',
-              padding: 40,
-              width: "45%",
-              margin: 10
-              
-              
-            }}
-            onPress={() => {
-              console.log("Booking")
-              navigation.push('Book Now')}}>
-            <Text style={{fontSize: 20, alignSelf: 'center',color: "white", fontWeight: "bold", fontFamily:"lucida grande"}}>Schedule Booking</Text>
-          </TouchableOpacity>
+              marign: 50,
+              alignContent: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity
+                style={styles.mainButtons}
+                onPress={() => {
+                  console.log('Booking');
+                  navigation.push('Book Now');
+                }}>
+                <Text style={styles.mainButtonText}>Schedule Booking</Text>
+              </TouchableOpacity>
 
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#0B9F72',
-              padding: 40,
-              width: "45%",
-              margin: 10
-              
-            }}
-            onPress={() => navigation.navigate('Get a Quote')}>
-            <Text style={{fontSize: 20, alignSelf: 'center',color: "white", fontWeight: "bold"}}>Generate a quote</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#0B9F72',
-              padding: 40,
-              width: "45%",
-              margin: 10
+              <TouchableOpacity
+                style={styles.mainButtons}
+                onPress={() => navigation.navigate('Get a Quote')}>
+                <Text style={styles.mainButtonText}>Generate a quote</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity
+                style={styles.mainButtons}
+                onPress={() => {
+                  navigation.navigate('Pending Bookings');
+                }}>
+                <Text style={styles.mainButtonText}>Pending Bookings</Text>
+              </TouchableOpacity>
 
-            }}
-            onPress={()=>{navigation.navigate('Pending Bookings')}}
-            >
-            <Text style={{fontSize: 20, alignSelf: 'center',color: "white", fontWeight: "bold"}}>Pending Bookings</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#0B9F72',
-              padding: 40,
-              width: "45%",
-              margin: 10
-            }} 
-            onPress={()=> navigation.push('My Bookings')}>
-            <Text style={{fontSize: 20, alignSelf: 'center', color: "white", fontWeight: "bold"}}>My Bookings</Text>
-          </TouchableOpacity>
-        </View>
+              <TouchableOpacity
+                style={styles.mainButtons}
+                onPress={() => navigation.push('My Bookings')}>
+                <Text style={styles.mainButtonText}>My Bookings</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
+  );
+};
+
+
+
+
+
+
+const DriverBookings = ({ navigation }) => {
+  const [driver, setDriver] = React.useState('-MsP64tYV3CF2Hnr8ofo');
+  return (
+    <ScrollView>
+      <View>
+        <Image
+          style={{
+            width: 350,
+            height: 350,
+            alignSelf: 'center',
+            marginBottom: 5,
+          }}
+          source={logo}
+        />
+        <View>
+          <View
+            style={{
+              marign: 50,
+              alignContent: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity
+                style={styles.mainButtons}
+                onPress={() => {
+                  console.log('Find Jobs');
+                  navigation.push('Find Jobs', driver);
+                }}>
+                <Text style={styles.mainButtonText}>Find Jobs</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.mainButtons}
+                onPress={() => navigation.push('My Jobs', driver)}>
+                <Text style={styles.mainButtonText}>My Jobs</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#0B9F72',
+                  padding: 40,
+                  width: '93%',
+                  margin: 10,
+                }}
+                onPress={() => {
+                  navigation.push('My Completed Bookings Driver', driver);
+                }}>
+                <Text style={styles.mainButtonText}>My Completed Bookings</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </View>
     </ScrollView>
   );
 };
 
 const Profile = () => {
   
-  const postData = () => {
-    var obj={
-      Name: "Sherry",
-      Username: "Sherry32",
-      Email: "shehrozahmad372@gmail.com"
-    }
-    var requestOptions = {
-      method: 'POST',
-      body: JSON.stringify(
-        obj
-        ),
-    };
-
-    fetch(`${FIREBASE_API_ENDPOINT}/customers.json`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => console.log(result))
-      .catch((error) => console.log('error', error));
-  };
-
-  return (<View><Button title="Click" onPress={postData}/></View>);
+  return (
+    <View>
+      <Text>Profile</Text>
+    </View>
+  );
 };
 
-const CardPayment = ()=>{
-  const [name, setName] = React.useState();
-  const {confirmPayment, loading}= useConfirmPayment();
 
-  const handlePayments = async() => {
-    const response = await fetch(`${"http://localhost:19002"}/create-payment-intent`,{
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        paymentMethodType: 'card', 
-        currency: 'usd'
-      })
-    })
-    const {clientsecret}  = await response.json();
-    const {error, paymentIntent} = await confirmPayment(clientsecret,{
-      type: 'Card',
-      billingDetails: {name}
-    })
-    if(error){
-      Alert.alert(`Error code: ${error.code} `, error.message);
-    }else if(paymentIntent){
-      Alert.alert('Success', `Payment Successful: ${paymentIntent.id}`);
-    }
-    
-  }
 
-  return(
-    <StripeProvider publishableKey={PUBLISHABLE_KEY}>
-    <View>
-    <Text style={{ padding: 10 }}>Name: </Text>
-      <TextInput onChangeText={(v)=> {setName(v);}}
-        style={styles.textInput}
-      />
-      <CardField postalCodeEnabled={false} style={{width: "90%",height: 40, marginVertical: 30, marginLeft: 10}} 
-        cardStyle={{borderColor: "#066145", borderWidth: 1, borderRadius: 5}}
-      />
-      <TouchableOpacity style={{marginTop:20, 
-        padding:10, 
-        backgroundColor: "#0B9F72", 
-        width: 200, 
-        alignSelf:'center', 
-        borderRadius: 10}}
-        onPress={handlePayments}
-        disabled={loading}
-        >
-        <Text style={{alignSelf: "center", color: 'white'}}>Pay</Text>
-        </TouchableOpacity>
-    </View>
-    </StripeProvider>
-  )
-}
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -260,85 +193,16 @@ const Drawer = createDrawerNavigator();
 function BookingStack() {
   return (
     <Stack.Navigator>
-    <Stack.Screen
-        name="Booking"
-        component={Booking}
-        options={{
-          headerShown : false,
-          headerStyle: {
-            backgroundColor: '#066145',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      />
+      <Stack.Screen name="Booking" component={Booking} options={{headerShown:false}} />
+      <Stack.Screen name="Book Now" component={BookNow} />
+      <Stack.Screen name="Get a Quote" component={GetAQuote} />
+      <Stack.Screen name="Pending Bookings" component={PendingBookings} />
       <Stack.Screen
-        name="Book Now"
-        component={BookNow}
-        options={{
-          headerStyle: {
-            backgroundColor: '#066145',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
+        name="Pending Booking Details"
+        component={PendingBookingDetails}
       />
-      <Stack.Screen
-        name="Get a Quote"
-        component={GetAQuote}
-        options={{
-          headerStyle: {
-            backgroundColor: '#066145',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      />
-      <Stack.Screen
-        name="Pending Bookings"
-        component={PendingBookings}
-        options={{
-          headerStyle: {
-            backgroundColor: '#066145',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      />
-      <Stack.Screen
-        name="My Bookings"
-        component={MyBookings}
-        options={{
-          headerStyle: {
-            backgroundColor: '#066145',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      />
-            <Stack.Screen
-        name="Booking Details"
-        component={BookingDetails}
-        options={{
-          headerStyle: {
-            backgroundColor: '#066145',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      />
+      <Stack.Screen name="My Bookings" component={MyBookings} />
+      <Stack.Screen name="Booking Details" component={BookingDetails} />
     </Stack.Navigator>
   );
 }
@@ -346,135 +210,34 @@ function BookingStack() {
 function DriverStack() {
   return (
     <Stack.Navigator>
-    <Stack.Screen
-        name="Find Bookings"
-        component={FindBookings}
-        options={{
-          headerShown : false,
-          headerStyle: {
-            backgroundColor: '#066145',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      />
-      <Stack.Screen
-        name="Find Jobs"
-        component={FindJobs}
-        options={{
-          headerStyle: {
-            backgroundColor: '#066145',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      />
-      <Stack.Screen
-        name="Apply Job"
-        component={ApplyJob}
-        options={{
-          headerStyle: {
-            backgroundColor: '#066145',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      />
-      <Stack.Screen
-        name="My Jobs"
-        component={MyJobs}
-        options={{
-          headerStyle: {
-            backgroundColor: '#066145',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      />
+      <Stack.Screen name="Driver Bookings" component={DriverBookings} />
+      <Stack.Screen name="Find Jobs" component={FindJobs} />
+      <Stack.Screen name="Apply Job" component={ApplyJob} />
+      <Stack.Screen name="My Jobs" component={MyJobs} />
       <Stack.Screen
         name="My Completed Bookings Driver"
         component={MyCompletedBookingsDriver}
-        options={{
-          headerStyle: {
-            backgroundColor: '#066145',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
       />
       <Stack.Screen
         name="Booking Details Driver"
         component={BookingDetailsDriver}
-        options={{
-          headerStyle: {
-            backgroundColor: '#066145',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      /><Stack.Screen
-      name="Completed Bookings Driver Details"
-      component={CompletedBookingsDriverDetails}
-      options={{
-        headerStyle: {
-          backgroundColor: '#066145',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      }}
-    />
+      />
+      <Stack.Screen
+        name="Completed Bookings Driver Details"
+        component={CompletedBookingsDriverDetails}
+      />
     </Stack.Navigator>
-    
   );
 }
 
 function PaymentStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="My Payments"
-        component={PendingPayments}
-        options={{
-          headerStyle: {
-            backgroundColor: '#066145',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      />
-            <Stack.Screen
-        name="Payment Details"
-        component={Payment}
-        options={{
-          headerStyle: {
-            backgroundColor: '#066145',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      />
+      <Stack.Screen name="My Payments" component={PendingPayments} />
+      <Stack.Screen name="Payment Details" component={Payment} />
     </Stack.Navigator>
   );
 }
-
 
 function MyDrawer() {
   return (
@@ -495,33 +258,18 @@ export default function App() {
   );
 }
 
-
-
 const styles = StyleSheet.create({
-  textInput: {
-      borderColor: '#066145',
-      borderWidth: 1,
-      padding: 3,
-      marginLeft: 10,
-      width: '90%',
-      borderRadius: 4,
-    },
-  buttonStyle: {
-      backgroundColor: '#0B9F72',
-      padding: 10,
-      width: 100,
-      borderRadius: 10,
-      alignSelf: 'center',
-      marginTop: 20,
-    },
-    buttonText: {
-      alignSelf: 'center', color: 'white'
-    },
-  image: {
-    flex: 1,
-    justifyContent: 'center',
+  
+  mainButtons: {
+    backgroundColor: '#0B9F72',
+    padding: 40,
+    width: '45%',
+    margin: 10,
+  },
+  mainButtonText: {
+    fontSize: 20,
+    alignSelf: 'center',
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
-
-
-

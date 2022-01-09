@@ -23,12 +23,15 @@ const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebasei
 export default function BookingDetails({navigation, route}){
     const id= route.params;
     const [bookingData, setBookingData]= React.useState({});
-    const [driverData, setDriverData]= React.useState({});
+    const [driverData, setDriverData]= React.useState({Name: '', Contact:'', VehicleNo:''});
     const{PickUpAddress, DropoffAddress, PickupCity,  DropoffCity, Description,Vehicle, Offer, Weight, Status,Date, Time }=bookingData;
     const {Name , Contact, VehicleNo}= driverData;
+    
     const getBookingsData = async () => {
       const response = await fetch(`${FIREBASE_API_ENDPOINT}/bookings/${id}.json`);
       const data = await response.json();
+
+      console.log(data);
       setBookingData(data);
       console.log(data.Driver);
       const driverresponse = await fetch(`${FIREBASE_API_ENDPOINT}/drivers/${data.Driver}.json`);
@@ -100,7 +103,7 @@ export default function BookingDetails({navigation, route}){
                 },
                 { text: "Confirm", onPress: () => {deleteData(); navigation.goBack();}}
               ]
-            )}} style={{marginTop:20 , padding:10 ,marginBottom: 20 ,backgroundColor: "#0B9F72", width: 200 ,alignSelf:'center',borderRadius: 5}}><Text style={{alignSelf: 'center', color: "white", fontWeight: "bold", fontSize: 18}}>Cancel Booking</Text></TouchableOpacity>
+            )}} style={{marginTop:20 , padding:10 ,marginBottom: 20 ,backgroundColor: "#0B9F72", width: 200 ,alignSelf:'center',borderRadius: 5}}><Text style={{alignSelf: 'center', color: "white", fontWeight: "bold", fontSize: 18}}>Delete Record</Text></TouchableOpacity>
          
          </ScrollView>
           </View>
