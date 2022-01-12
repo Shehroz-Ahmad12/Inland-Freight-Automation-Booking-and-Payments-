@@ -2,22 +2,8 @@
 import * as React from 'react';
 import {Text, View, StyleSheet, ImageBackground,
   TouchableOpacity,
-  TextInput,
-  Picker,
-  Image,
   ScrollView, FlatList, Alert
 } from 'react-native';
-import Constants from 'expo-constants';
-import { CheckBox, Icon, Input, ButtonGroup } from 'react-native-elements';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
-
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
 
 
 const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
@@ -70,8 +56,9 @@ export default function MyJobs ({ navigation, route }){
                 <Text>Destination: {bookingData[item].DropoffCity}, {bookingData[item].DropoffAddress}</Text>
                 </View>
                 </View>
-                <View>
-                <Text style={{marginTop: 5, fontSize: 20, alignSelf:'flex-end', fontWeight: "bold"}}>{bookingData[item].Offer} Rs</Text>
+                <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
+                <Text style={{fontSize: 12, margin: 5, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 5, borderRadius: 5}} >{bookingData[item].Status}</Text>
+                <Text style={{fontSize: 20, alignSelf:'flex-end', fontWeight: "bold"}}>{bookingData[item].Offer} Rs</Text>
                 </View>
               </TouchableOpacity>
             )}

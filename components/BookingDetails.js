@@ -1,22 +1,13 @@
 import * as React from 'react';
 import {Text, View, StyleSheet, ImageBackground,
   TouchableOpacity,
-  TextInput,
-  Picker,
   Image,
   ScrollView, FlatList, Alert
 } from 'react-native';
-import Constants from 'expo-constants';
-import { CheckBox, Icon, Input, ButtonGroup } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
 
 const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
 
@@ -76,22 +67,33 @@ export default function BookingDetails({navigation, route}){
               </View>
               <View style={{backgroundColor: 'white', padding: 10, margin: 2, marginHorizontal:10}}>
                 <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Driver </Text>
-                
+              <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
+              <View>
                 <Text style={{fontSize: 20, marginLeft: 50, marginTop: 5}} >{Name}</Text>
                 <Text style={{fontSize: 20, marginLeft: 50, marginTop: 5}} >{Contact}</Text>
                 <Text style={{fontSize: 20, marginLeft: 50, marginTop: 5}} >{VehicleNo}</Text>
               </View>
-                <View  style={{backgroundColor: 'white', padding: 10, margin: 2,  marginHorizontal:10,flexDirection: "row", alignItems: 'center'}}>
+              <Icon
+          name="truck"
+          type="font-awesome"
+          size={40}
+          color='#0B9F72'
+          style={{margin: 10, fontSize: 30}}
+        />
+
+              </View>
+              </View>
+                <View  style={{backgroundColor: 'white', padding: 10, margin: 2,  marginHorizontal:10,flexDirection: "row", alignItems: 'center', justifyContent:'space-between'}}>
                 <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Vehicle Type </Text>
-                <Text style={{fontSize: 16, marginLeft: 50, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Vehicle}</Text>
+                <Text style={{fontSize: 16, marginRight: 20, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Vehicle}</Text>
               </View>
-              <View  style={{backgroundColor: 'white', padding: 10, margin: 2, marginHorizontal:10, flexDirection: "row", alignItems: 'center'}}>
+              <View  style={{backgroundColor: 'white', padding: 10, margin: 2, marginHorizontal:10, flexDirection: "row", alignItems: 'center', justifyContent:'space-between'}}>
                 <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Status </Text>
-                <Text style={{fontSize: 16, marginLeft: 50, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Status}</Text>
+                <Text style={{fontSize: 16, marginRight: 20, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Status}</Text>
               </View>
-              <View  style={{backgroundColor: 'white', padding: 10, margin: 2 , marginHorizontal:10,flexDirection: "row", alignItems: 'center'}}>
+              <View  style={{backgroundColor: 'white', padding: 10, margin: 2 , marginHorizontal:10,flexDirection: "row", alignItems: 'center',justifyContent:'space-between'}}>
                 <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Weight </Text>
-                <Text style={{fontSize: 16, marginLeft: 50, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Weight} kg</Text>
+                <Text style={{fontSize: 16, marginRight: 20, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Weight} kg</Text>
               </View>
                 <TouchableOpacity onPress={()=>{Alert.alert(
               'Cancel Booking',

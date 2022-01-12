@@ -6,16 +6,18 @@ import {Text, View, StyleSheet, ImageBackground,
   ScrollView,
   Modal, FlatList
 } from 'react-native';
-import Constants from 'expo-constants';
-import { CheckBox, Icon, Input, ButtonGroup } from 'react-native-elements';
+import { ButtonGroup } from 'react-native-elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
+
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
 
 
 
-export default function  GetAQuote ()  {
+export default function  GetAQuote ({navigation})  {
 
   const [category, setCategory] = React.useState(0);
   const [type, setType] = React.useState('');
@@ -23,31 +25,45 @@ export default function  GetAQuote ()  {
   const [customerType, setCustomerType] = React.useState(0);
   const [isPickup, setIsPickup]= React.useState(true);
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [getText, setText] = React.useState();  const [pickUpCity, setPickUpCity] = React.useState("");
+  const [getText, setText] = React.useState();  
+  const [pickUpCity, setPickUpCity] = React.useState("");
   const [dropOffCity, setDropOffCity] = React.useState("");
   const[citiesData, setCitiesData]= React.useState();
   
-  const CUSTOMER = "-MsgaaNM6XCecZ6niCZd";
-  const [quoteData, setQuote] =React.useState({Category: category,PickupCity: '', PickUpAddress: '', DropoffCity: '', DropoffAddress: '',
-    Description: '', Weight: '', Offer: '', Customer: CUSTOMER});
+  const [quoteData, setQuote] =React.useState({Category: '',PickupCity: pickUpCity, PickUpAddress: '', DropoffCity: dropOffCity, DropoffAddress: '',
+    Description: '', Weight: '', Pieces:'', Width: '', Height: '', Insurance:insurance, TempControlled: type, CustomerType:''});
 
 
+    const SaveQuote = async () => {
+      
+      setQuote({...quoteData, DropoffCity:dropOffCity})
+      setQuote({...quoteData, PickupCity:pickUpCity})
 
-
-
-
-
-  const postData = () => {
-    var requestOptions = {
-      method: 'POST',
-      body: JSON.stringify(quoteData),
+      
+      console.log(quoteData)
+      var obj= quoteData;
+      var item = await AsyncStorage.getItem('@store:savedQuotes');
+      item=JSON.parse(item);
+      item=[...item, obj] 
+      console.log('Saving');
+      await AsyncStorage.setItem(
+        '@store:savedQuotes',
+        JSON.stringify(item)
+      );
+      console.log('Saving Done!');
+      navigation.goBack();
     };
+  
+    const LoadData = async () => {
+      console.log('Loading');
+      var item = await AsyncStorage.getItem('@store:savedQuotes');
+      var parsed = JSON.parse(item)
+     console.log(parsed);
+      console.log('Loading Done!');
+    };
+  
 
-    fetch(`${FIREBASE_API_ENDPOINT}/quotes.json`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => console.log(result))
-      .catch((error) => console.log('error', error));
-  };
+
 
   const getCitiesData = async () => {
     const response = await fetch(`${FIREBASE_API_ENDPOINT}/cities.json`);
@@ -83,7 +99,16 @@ export default function  GetAQuote ()  {
 
   };
 
-
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+        onPress={() => {LoadData()}}
+          style={{backgroundColor: "white", padding: 10, marginLeft:10, borderRadius:10}}
+        ><Text>View Quotes</Text></TouchableOpacity>
+      )
+    });
+  });
 
 
 
@@ -116,7 +141,8 @@ export default function  GetAQuote ()  {
             <TouchableOpacity
               style={styles.countryLabel}
               onPress={() => {
-                isPickup?setPickup(item):setDropOff(item);
+                isPickup?setPickUpCity(item):setDropOffCity(item);
+                setModalVisible(!modalVisible)
                 
               }}>
               <Text>{item}</Text>
@@ -132,8 +158,7 @@ export default function  GetAQuote ()  {
     <ScrollView>
     <View style={{backgroundColor: "lightgrey", height: "100%"}}>
     <View style={{ padding: 20, marginTop: 20, backgroundColor: "white", margin: 20}}>
-    <Text style={{fontSize: 30, fontWeight: 'bold', alignSelf: 'center', margin:10, backgroundColor: '#0B9F72', padding: 15, borderRadius: 10, color: 'white'}}>Get a Quote</Text>
-      <ButtonGroup
+       <ButtonGroup
         buttons={[
           'Your Shipment is less than 50 kg',
           'Your Shipment is more than 50 kg',
@@ -141,6 +166,13 @@ export default function  GetAQuote ()  {
         selectedIndex={category}
         onPress={(value) => {
           setCategory(value);
+          if(value===0){
+            setQuote({...quoteData, Category: 'Less than 50 kg'})
+          }
+          else{
+            setQuote({...quoteData, Category: 'More than 50 kg'})
+          }
+          
         }}
         containerStyle={{
           backgroundColor: 'white',
@@ -154,23 +186,23 @@ export default function  GetAQuote ()  {
           backgroundColor: '#0B9F72',
         }}
       />
-      <Text style={{ padding: 10 }}>Goods Description: </Text>
-      <TextInput
-        multiline
-        numberOfLines={4}
-        style={[styles.textInput,{height: 70}]}   
-        onChangeText={(v)=> {setQuote({...quoteData, Description: v});}}   />
 
       <Text style={{ padding: 10 }}>Pieces: </Text>
       <TextInput
-        style={styles.textInput}/>
-      <Text style={{ padding: 10 }}>Weight: </Text>
+        keyboardType='numeric'
+        style={styles.textInput}
+        onChangeText={(v)=> {setQuote({...quoteData, Pieces: v});}}
+        />
+      <Text style={{ padding: 10 }}>Weight (kg): </Text>
       <TextInput
-        style={styles.textInput}/>
-      <Text style={{ padding: 10 }}>Dimensions: </Text>
+      keyboardType='numeric'
+        style={styles.textInput}
+        onChangeText={(v)=> {setQuote({...quoteData, Weight: v});}}/>
+      <Text style={{ padding: 10 }}>Dimensions (cm): </Text>
       <View style={{ flexDirection: 'row' }}>
         <Text style={{ padding: 10 }}>Height: </Text>
         <TextInput
+        keyboardType='numeric'
           style={{
             borderColor: '#066145',
             borderWidth: 1,
@@ -179,10 +211,13 @@ export default function  GetAQuote ()  {
             width: '20%',
             borderRadius: 4,
           }}
+          onChangeText={(v)=> {setQuote({...quoteData, Height: v});}}
         />
         <Text style={{ padding: 10 }}>Width: </Text>
         <TextInput
+        keyboardType='numeric'
           style={styles.textInput2}
+          onChangeText={(v)=> {setQuote({...quoteData, Width: v});}}
         />
       </View>
       <Text style={{ padding: 10 }}>Pickup City: </Text>
@@ -212,12 +247,13 @@ export default function  GetAQuote ()  {
         multiline={true}
         numberOfLines={4}
         style={[styles.textInput, {height:100}]}
+        onChangeText={(v)=> {setQuote({...quoteData, Description: v});}}
       />
       <Text style={{ padding: 10 }}>Temp Controlled/ Perishable Goods? </Text>
       <Picker
         selectedValue={type}
         style={[styles.textInput, {fontSize:12}]}
-        onValueChange={(itemValue, itemIndex) => setType(itemValue)}>
+        onValueChange={(itemValue, itemIndex) => setQuote({...quoteData, TempControlled: itemValue})}>
         <Picker.Item label="Please Specify" value="" />
         <Picker.Item label="Yes" value="yes" />
         <Picker.Item label="No" value="no" />
@@ -226,7 +262,7 @@ export default function  GetAQuote ()  {
       <Picker
         selectedValue={insurance}
         style={[styles.textInput, {fontSize:12}]}
-        onValueChange={(itemValue, itemIndex) => setInsurance(itemValue)}>
+        onValueChange={(itemValue, itemIndex) => setQuote({...quoteData, Insurance: itemValue})}>
         <Picker.Item label="Please Specify" value="" />
         <Picker.Item label="Yes" value="yes" />
         <Picker.Item label="No" value="no" />
@@ -237,6 +273,12 @@ export default function  GetAQuote ()  {
         selectedIndex={customerType}
         onPress={(value) => {
           setCustomerType(value);
+          if(value===0){
+            setQuote({...quoteData, CustomerType: 'Private'})
+          }
+          else{
+            setQuote({...quoteData, CustomerType: 'Business'})
+          }
         }}
         containerStyle={{
           backgroundColor: 'white',
@@ -259,7 +301,7 @@ export default function  GetAQuote ()  {
           alignSelf: 'center',
           marginTop: 20,
         }}
-        onPress={postData}
+        onPress={SaveQuote}
         
         >
         <Text style={{ alignSelf: 'center', color: 'white' }}>Save Quote</Text>
@@ -336,8 +378,10 @@ const styles = StyleSheet.create({
   countryLabel: {
     width: "100%",
     padding: 10,
-    backgroundColor: 'lightgreen',
-    margin: 1,
+    borderColor: 'green',
+    borderWidth: 1,
+    marginBottom: 1,
     borderRadius: 10,
+
   },
 });

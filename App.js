@@ -195,8 +195,12 @@ const Drawer = createDrawerNavigator();
 
 function BookingStack() {
   return (
-    <Stack.Navigator >
-      <Stack.Screen name="Booking" component={Booking}  />
+    <Stack.Navigator screenOptions={{
+      headerTintColor: 'white',
+      headerTitleAlign: 'center',
+      headerTitleStyle: {fontWeight: 'bold', fontSize: 24},
+      headerStyle: { backgroundColor: '#0B9F72', padding: 0 }}}>
+      <Stack.Screen name="Booking" component={Booking} options={{headerShown: false}} />
       <Stack.Screen name="Book Now" component={BookNow} />
       <Stack.Screen name="Get a Quote" component={GetAQuote} />
       <Stack.Screen name="Pending Bookings" component={PendingBookings} />
@@ -212,22 +216,29 @@ function BookingStack() {
 
 function DriverStack() {
   return (
-    <Stack.Navigator >
-      <Stack.Screen name="Driver Bookings" component={DriverBookings} />
+    <Stack.Navigator screenOptions={{
+      headerTintColor: 'white',
+      headerTitleAlign: 'center',
+      headerTitleStyle: {fontWeight: 'bold', fontSize: 24},
+      headerStyle: { backgroundColor: '#0B9F72', padding: 0 }}}>
+      <Stack.Screen name="Driver Bookings" component={DriverBookings}  options={{headerShown: false}}/>
       <Stack.Screen name="Find Jobs" component={FindJobs} />
       <Stack.Screen name="Apply Job" component={ApplyJob} />
       <Stack.Screen name="My Jobs" component={MyJobs} />
       <Stack.Screen
         name="My Completed Bookings Driver"
         component={MyCompletedBookingsDriver}
+        options={{title: "Completed Jobs"}}
       />
       <Stack.Screen
         name="Booking Details Driver"
         component={BookingDetailsDriver}
+        options={{title: "Booking Details"}}
       />
       <Stack.Screen
         name="Completed Bookings Driver Details"
         component={CompletedBookingsDriverDetails}
+        options={{title: "Booking Details"}}
       />
     </Stack.Navigator>
   );
@@ -235,60 +246,20 @@ function DriverStack() {
 
 function PaymentStack() {
   return (
-    <Stack.Navigator >
-      <Stack.Screen name="My Payments" component={PendingPayments} />
+    <Stack.Navigator screenOptions={{
+      headerTintColor: 'white',
+      headerTitleAlign: 'center',
+      headerTitleStyle: {fontWeight: 'bold'},
+      headerStyle: { backgroundColor: '#0B9F72', padding: 0 }}}>
+      <Stack.Screen name="My Payments" component={PendingPayments} options={{headerShown: false}}/>
       <Stack.Screen name="Payment Details" component={Payment} />
     </Stack.Navigator>
   );
 }
 
-
-// const Tab = createMaterialBottomTabNavigator();
-
-// function MyTabs() {
-//   return (
-//     <Tab.Navigator
-//       initialRouteName="Booking"
-//       activeColor="#e91e63"
-//       barStyle={{ backgroundColor: 'tomato' }}
-//     >
-//       <Tab.Screen
-//         name="Booking"
-//         component={BookingStack}
-//         options={{
-//           tabBarLabel: 'Home',
-//           tabBarIcon: ({ color }) => (
-//             <MaterialCommunityIcons name="home" color={color} size={26} />
-//           ),
-//         }}
-//       />
-//       <Tab.Screen
-//         name="Driver Menu"
-//         component={DriverStack}
-//         options={{
-//           tabBarLabel: 'Updates',
-//           tabBarIcon: ({ color }) => (
-//             <MaterialCommunityIcons name="bell" color={color} size={26} />
-//           ),
-//         }}
-//       />
-//       <Tab.Screen
-//         name="Paments"
-//         component={PaymentStack}
-//         options={{
-//           tabBarLabel: 'Profile',
-//           tabBarIcon: ({ color }) => (
-//             <MaterialCommunityIcons name="account" color={color} size={26} />
-//           ),
-//         }}
-//       />
-//     </Tab.Navigator>
-//   );
-// }
-
 function MyDrawer() {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator >
       <Drawer.Screen name="Booking Menu" component={BookingStack} />
       <Drawer.Screen name="Driver Menu" component={DriverStack} />
       <Drawer.Screen name="Payments Menu" component={PaymentStack} />

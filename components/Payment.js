@@ -5,10 +5,7 @@ import {Text, View, StyleSheet, ImageBackground,
   Picker,
   ScrollView
 } from 'react-native';
-import Constants from 'expo-constants';
-import { CheckBox, Icon, Input, ButtonGroup } from 'react-native-elements';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
+
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { CardField, useConfirmPayment } from '@stripe/stripe-react-native';
 const PUBLISHABLE_KEY = "pk_test_51KEBKKEaKSJeoPtKDUVrGpCvY5CyR40zYsTbaFjbAIcv4ii8f2uY0t6omkYUPfvxzJvTaZLbhVO3FEFWTH7TbmJN00R6zJ0ytm"
@@ -79,7 +76,7 @@ export default function Payment ({navigation, route})  {
       .catch((error) => console.log('error', error));
 
     changeStatus();
-    navigation.goBack();
+    
   };
   
 
@@ -130,7 +127,7 @@ export default function Payment ({navigation, route})  {
         width: 200, 
         alignSelf:'center', 
         borderRadius: 10}}
-        onPress={handlePayments}
+        onPress={()=>{handlePayments(); navigation.goBack();}}
         disabled={loading}
         >
         <Text style={{alignSelf: "center", color: 'white'}}>Pay</Text>

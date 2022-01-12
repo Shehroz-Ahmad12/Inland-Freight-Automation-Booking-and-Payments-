@@ -4,8 +4,11 @@ import {Text, View, StyleSheet, ImageBackground,
   TextInput,
   Picker,
   FlatList,
-  ScrollView, Button, Alert, Modal,
+  ScrollView, Button, Alert, Modal,ToastAndroid
 } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
@@ -63,6 +66,13 @@ export default function BookNow ({navigation})  {
     getCitiesData();
   }, [setCitiesData], [setText]);
 
+  const showToastWithGravity = () => {
+    ToastAndroid.showWithGravity(
+      "Your Booking is Confirmed",
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER
+    );
+  };
 
 
   const filter = (text) => {
@@ -143,7 +153,7 @@ export default function BookNow ({navigation})  {
                 isPickup?setPickup(item):setDropOff(item);
                 
               }}>
-              <Text>{item}</Text>
+              <Text style={{fontWeight: 'bold'}}>{item}</Text>
             </TouchableOpacity>
           )}
         />
@@ -154,7 +164,6 @@ export default function BookNow ({navigation})  {
     <View style={{backgroundColor: "lightgrey", height: "100%"}}>
     <ScrollView>
     <View style={{ padding: 20, marginTop: 20, backgroundColor: "white", margin: 20}}>
-    <Text style={{fontSize: 30, fontWeight: 'bold', alignSelf: 'center', margin:10, backgroundColor: '#0B9F72', padding: 15, borderRadius: 10, color: 'white'}}>Schedule Booking</Text>
       <Text style={{ padding: 10 }}>Pickup City: </Text>
       <TouchableOpacity style={[styles.textInput,{padding: 5}]} onPress={()=>{setIsPickup(true);setModalVisible(true);}}><Text>{pickUpCity===""?"Select City": pickUpCity}</Text></TouchableOpacity>
      
@@ -222,7 +231,7 @@ export default function BookNow ({navigation})  {
                 onPress: () => console.log("Cancel Pressed"),
                 style: "cancel"
               },
-              { text: "Confirm", onPress: () => {postData(); clear(); navigation.goBack()}}
+              { text: "Confirm", onPress: () => {postData(); clear();showToastWithGravity();navigation.goBack()}}
             ]
           )
           }}>
@@ -288,9 +297,11 @@ export default function BookNow ({navigation})  {
     countryLabel: {
       width: "100%",
       padding: 10,
-      backgroundColor: 'lightgreen',
-      margin: 1,
+      borderColor: 'green',
+      borderWidth: 1,
+      marginBottom: 1,
       borderRadius: 10,
+
     },
   });
   

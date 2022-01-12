@@ -1,22 +1,12 @@
 import * as React from 'react';
 import {Text, View, StyleSheet, ImageBackground,
   TouchableOpacity,
-  TextInput,
-  Picker,
   Image,
   ScrollView, FlatList, Alert
 } from 'react-native';
-import Constants from 'expo-constants';
-import { CheckBox, Icon, Input, ButtonGroup } from 'react-native-elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
 
 const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
 
@@ -55,14 +45,10 @@ export default function ApplyJob({navigation, route}){
       getBookingsData();
     }, [setBookingData]);
   
-
-
-
     return(
       <View style={{backgroundColor: 'lightgrey', height: "100%"}}>
       <ScrollView>
-                                        <Text style={{fontSize: 26, fontWeight: 'bold', alignSelf: 'center', marginBottom:10, backgroundColor: '#066145', width: "100%",padding: 15, textAlign: 'center',  color: 'white'}}>Apply Job</Text>
-
+                               
                   <Text style={{fontSize: 40, marginTop:20, alignSelf: "center", backgroundColor: "#066145", color: "white", borderRadius: 15, padding: 10}}>{Offer} Rs</Text>
                       <Text style={{fontSize: 16, alignSelf: "center", color: "#066145", borderRadius: 15, padding: 10,fontWeight: "bold" }}>{Date}, {Time}</Text>
                       
@@ -77,17 +63,17 @@ export default function ApplyJob({navigation, route}){
                       <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Description </Text>
                       <Text style={{fontSize: 20, marginLeft: 50, marginTop: 5}} >{Description}</Text>
                     </View>
-                      <View  style={{backgroundColor: 'white', padding: 10, margin: 2,  marginHorizontal:10,flexDirection: "row", alignItems: 'center'}}>
+                      <View  style={{backgroundColor: 'white', padding: 10, margin: 2,  marginHorizontal:10,flexDirection: "row", alignItems: 'center', justifyContent:'space-between'}}>
                       <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Vehicle Type </Text>
-                      <Text style={{fontSize: 16, marginLeft: 50, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Vehicle}</Text>
+                      <Text style={{fontSize: 16, marginRight: 20, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Vehicle}</Text>
                     </View>
-                    <View  style={{backgroundColor: 'white', padding: 10, margin: 2, marginHorizontal:10, flexDirection: "row", alignItems: 'center'}}>
+                    <View  style={{backgroundColor: 'white', padding: 10, margin: 2, marginHorizontal:10, flexDirection: "row", alignItems: 'center', justifyContent:'space-between'}}>
                       <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Status </Text>
-                      <Text style={{fontSize: 16, marginLeft: 50, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Status}</Text>
+                      <Text style={{fontSize: 16, marginRight: 20, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Status}</Text>
                     </View>
-                    <View  style={{backgroundColor: 'white', padding: 10, margin: 2 , marginHorizontal:10,flexDirection: "row", alignItems: 'center'}}>
+                    <View  style={{backgroundColor: 'white', padding: 10, margin: 2 , marginHorizontal:10,flexDirection: "row", alignItems: 'center', justifyContent:'space-between'}}>
                       <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Weight </Text>
-                      <Text style={{fontSize: 16, marginLeft: 50, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Weight} kg</Text>
+                      <Text style={{fontSize: 16, marginRight: 20, backgroundColor: '#0B9F72', color: "white", fontWeight: "bold", padding: 10, borderRadius: 5}} >{Weight} kg</Text>
                     </View>
                       <TouchableOpacity onPress={()=>{Alert.alert(
                     'Apply',
