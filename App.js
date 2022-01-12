@@ -24,6 +24,9 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { CardField, useConfirmPayment } from '@stripe/stripe-react-native';
 
@@ -192,8 +195,8 @@ const Drawer = createDrawerNavigator();
 
 function BookingStack() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Booking" component={Booking} options={{headerShown:false}} />
+    <Stack.Navigator >
+      <Stack.Screen name="Booking" component={Booking}  />
       <Stack.Screen name="Book Now" component={BookNow} />
       <Stack.Screen name="Get a Quote" component={GetAQuote} />
       <Stack.Screen name="Pending Bookings" component={PendingBookings} />
@@ -209,7 +212,7 @@ function BookingStack() {
 
 function DriverStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator >
       <Stack.Screen name="Driver Bookings" component={DriverBookings} />
       <Stack.Screen name="Find Jobs" component={FindJobs} />
       <Stack.Screen name="Apply Job" component={ApplyJob} />
@@ -232,19 +235,63 @@ function DriverStack() {
 
 function PaymentStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator >
       <Stack.Screen name="My Payments" component={PendingPayments} />
       <Stack.Screen name="Payment Details" component={Payment} />
     </Stack.Navigator>
   );
 }
 
+
+// const Tab = createMaterialBottomTabNavigator();
+
+// function MyTabs() {
+//   return (
+//     <Tab.Navigator
+//       initialRouteName="Booking"
+//       activeColor="#e91e63"
+//       barStyle={{ backgroundColor: 'tomato' }}
+//     >
+//       <Tab.Screen
+//         name="Booking"
+//         component={BookingStack}
+//         options={{
+//           tabBarLabel: 'Home',
+//           tabBarIcon: ({ color }) => (
+//             <MaterialCommunityIcons name="home" color={color} size={26} />
+//           ),
+//         }}
+//       />
+//       <Tab.Screen
+//         name="Driver Menu"
+//         component={DriverStack}
+//         options={{
+//           tabBarLabel: 'Updates',
+//           tabBarIcon: ({ color }) => (
+//             <MaterialCommunityIcons name="bell" color={color} size={26} />
+//           ),
+//         }}
+//       />
+//       <Tab.Screen
+//         name="Paments"
+//         component={PaymentStack}
+//         options={{
+//           tabBarLabel: 'Profile',
+//           tabBarIcon: ({ color }) => (
+//             <MaterialCommunityIcons name="account" color={color} size={26} />
+//           ),
+//         }}
+//       />
+//     </Tab.Navigator>
+//   );
+// }
+
 function MyDrawer() {
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name="Booking" component={BookingStack} />
-      <Drawer.Screen name="Driver" component={DriverStack} />
-      <Drawer.Screen name="Payments" component={PaymentStack} />
+      <Drawer.Screen name="Booking Menu" component={BookingStack} />
+      <Drawer.Screen name="Driver Menu" component={DriverStack} />
+      <Drawer.Screen name="Payments Menu" component={PaymentStack} />
       <Drawer.Screen name="Profile" component={Profile} />
     </Drawer.Navigator>
   );

@@ -13,17 +13,21 @@ import { StripeProvider } from '@stripe/stripe-react-native';
 import { CardField, useConfirmPayment } from '@stripe/stripe-react-native';
 const PUBLISHABLE_KEY = "pk_test_51KEBKKEaKSJeoPtKDUVrGpCvY5CyR40zYsTbaFjbAIcv4ii8f2uY0t6omkYUPfvxzJvTaZLbhVO3FEFWTH7TbmJN00R6zJ0ytm"
 
+const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
+
+
 export default function Payment ({navigation, route})  {
     
 
     const [bookingData, setBookingData]= React.useState({});
     const [name, setName] = React.useState();
-    const [paymentTime, setPaymentTime]= React.userState(new Date());
+    const [paymentTime, setPaymentTime]= React.useState(new Date());
     const {confirmPayment, loading}= useConfirmPayment();
     const{Offer}=bookingData;
 
     const getBookingsData = async () => {
       const id= route.params;
+      console.log(id);
       const response = await fetch(`${FIREBASE_API_ENDPOINT}/bookings/${id}.json`);
       const data = await response.json();
       setBookingData(data);
@@ -56,6 +60,7 @@ export default function Payment ({navigation, route})  {
 
 
   const handlePayments = () => {
+    const id=route.params;
     var paymentData= {
       Cardholder: name,
       Payment: Offer,
@@ -74,6 +79,7 @@ export default function Payment ({navigation, route})  {
       .catch((error) => console.log('error', error));
 
     changeStatus();
+    navigation.goBack();
   };
   
 
@@ -106,7 +112,7 @@ export default function Payment ({navigation, route})  {
       <StripeProvider publishableKey={PUBLISHABLE_KEY}>
       <ScrollView>
       <View style={{ padding: 20, marginTop: 20}}>
-      <Text style={{fontSize: 40, alignSelf: "center", backgroundColor: "#066145", color: "white", borderRadius: 15, padding: 10}}>{Offer} Rs</Text>
+      <Text style={{fontSize: 40, alignSelf: "center", backgroundColor: "#066145", color: "white", borderRadius: 15, padding: 10}}>{bookingData.Offer} Rs</Text>
       
       <Text style={{fontSize: 15, alignSelf: "center", color: "#066145", borderRadius: 15, padding: 10}}>{paymentTime.toDateString()}, {paymentTime.toTimeString()}</Text>
   

@@ -76,6 +76,7 @@ export default function BookingDetails({navigation, route}){
               </View>
               <View style={{backgroundColor: 'white', padding: 10, margin: 2, marginHorizontal:10}}>
                 <Text style={{fontSize: 20, fontWeight: "bold", marginLeft: 10}}>Driver </Text>
+                
                 <Text style={{fontSize: 20, marginLeft: 50, marginTop: 5}} >{Name}</Text>
                 <Text style={{fontSize: 20, marginLeft: 50, marginTop: 5}} >{Contact}</Text>
                 <Text style={{fontSize: 20, marginLeft: 50, marginTop: 5}} >{VehicleNo}</Text>

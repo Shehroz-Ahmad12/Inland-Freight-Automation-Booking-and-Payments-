@@ -61,6 +61,8 @@ export default function ApplyJob({navigation, route}){
     return(
       <View style={{backgroundColor: 'lightgrey', height: "100%"}}>
       <ScrollView>
+                                        <Text style={{fontSize: 26, fontWeight: 'bold', alignSelf: 'center', marginBottom:10, backgroundColor: '#066145', width: "100%",padding: 15, textAlign: 'center',  color: 'white'}}>Apply Job</Text>
+
                   <Text style={{fontSize: 40, marginTop:20, alignSelf: "center", backgroundColor: "#066145", color: "white", borderRadius: 15, padding: 10}}>{Offer} Rs</Text>
                       <Text style={{fontSize: 16, alignSelf: "center", color: "#066145", borderRadius: 15, padding: 10,fontWeight: "bold" }}>{Date}, {Time}</Text>
                       

@@ -77,8 +77,6 @@ export default function BookNow ({navigation})  {
 
   };
 
-
-
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
@@ -155,8 +153,8 @@ export default function BookNow ({navigation})  {
       
     <View style={{backgroundColor: "lightgrey", height: "100%"}}>
     <ScrollView>
-    
     <View style={{ padding: 20, marginTop: 20, backgroundColor: "white", margin: 20}}>
+    <Text style={{fontSize: 30, fontWeight: 'bold', alignSelf: 'center', margin:10, backgroundColor: '#0B9F72', padding: 15, borderRadius: 10, color: 'white'}}>Schedule Booking</Text>
       <Text style={{ padding: 10 }}>Pickup City: </Text>
       <TouchableOpacity style={[styles.textInput,{padding: 5}]} onPress={()=>{setIsPickup(true);setModalVisible(true);}}><Text>{pickUpCity===""?"Select City": pickUpCity}</Text></TouchableOpacity>
      

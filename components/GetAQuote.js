@@ -3,37 +3,144 @@ import {Text, View, StyleSheet, ImageBackground,
   TouchableOpacity,
   TextInput,
   Picker,
-  ScrollView
+  ScrollView,
+  Modal, FlatList
 } from 'react-native';
 import Constants from 'expo-constants';
 import { CheckBox, Icon, Input, ButtonGroup } from 'react-native-elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 
+const FIREBASE_API_ENDPOINT = 'https://freight-automation-default-rtdb.firebaseio.com/';
 
 
 
 export default function  GetAQuote ()  {
-  const [check1, setCheck1] = React.useState(false);
-  const [check2, setCheck2] = React.useState(false);
-  const [check3, setCheck3] = React.useState(false);
-  const [check4, setCheck4] = React.useState(false);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [selectedValue, setSelectedValue] = React.useState('');
-  const [selectedIndex1, setSelectedIndex1] = React.useState(0);
+
+  const [category, setCategory] = React.useState(0);
+  const [type, setType] = React.useState('');
+  const [insurance, setInsurance] = React.useState('');
+  const [customerType, setCustomerType] = React.useState(0);
+  const [isPickup, setIsPickup]= React.useState(true);
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [getText, setText] = React.useState();  const [pickUpCity, setPickUpCity] = React.useState("");
+  const [dropOffCity, setDropOffCity] = React.useState("");
+  const[citiesData, setCitiesData]= React.useState();
+  
+  const CUSTOMER = "-MsgaaNM6XCecZ6niCZd";
+  const [quoteData, setQuote] =React.useState({Category: category,PickupCity: '', PickUpAddress: '', DropoffCity: '', DropoffAddress: '',
+    Description: '', Weight: '', Offer: '', Customer: CUSTOMER});
+
+
+
+
+
+
+
+  const postData = () => {
+    var requestOptions = {
+      method: 'POST',
+      body: JSON.stringify(quoteData),
+    };
+
+    fetch(`${FIREBASE_API_ENDPOINT}/quotes.json`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.log('error', error));
+  };
+
+  const getCitiesData = async () => {
+    const response = await fetch(`${FIREBASE_API_ENDPOINT}/cities.json`);
+    const data = await response.json();
+    var arr;
+    var arr2=[];
+    for(let key in data){
+      arr = data[key] 
+    }
+    arr.forEach(element => {
+      arr2.push(element.city);
+    });
+
+    setCitiesData(arr2);
+    setText(arr2);
+  };
+
+  React.useEffect(() => {
+    getCitiesData();
+  }, [setCitiesData], [setText]);
+
+
+
+  const filter = (text) => {
+    console.log(getCitiesData);
+    var result = getText.filter((city) => {
+      if (city.includes(text)) {
+        return city;
+      }
+    });
+    console.log(result);
+    setCitiesData(result);
+
+  };
+
+
+
+
 
   return (
+    <View>
+
+  <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+          <TextInput
+          placeholder="Enter City Name"
+          style={{ padding: 5, width: '80%' }}
+          onChangeText={(v) => {
+            filter(v);
+          }}
+        />
+        <FlatList style={{width: "100%"}}
+          refreshing={false}
+          onRefresh={getCitiesData}
+          keyExtractor={(item, index) => index}
+          data={citiesData}
+          renderItem={({ item, index }) => (
+            <TouchableOpacity
+              style={styles.countryLabel}
+              onPress={() => {
+                isPickup?setPickup(item):setDropOff(item);
+                
+              }}>
+              <Text>{item}</Text>
+            </TouchableOpacity>
+          )}
+        />
+          </View>
+        </View>
+      </Modal>
+      
+
+
     <ScrollView>
     <View style={{backgroundColor: "lightgrey", height: "100%"}}>
     <View style={{ padding: 20, marginTop: 20, backgroundColor: "white", margin: 20}}>
+    <Text style={{fontSize: 30, fontWeight: 'bold', alignSelf: 'center', margin:10, backgroundColor: '#0B9F72', padding: 15, borderRadius: 10, color: 'white'}}>Get a Quote</Text>
       <ButtonGroup
         buttons={[
           'Your Shipment is less than 50 kg',
           'Your Shipment is more than 50 kg',
         ]}
-        selectedIndex={selectedIndex}
+        selectedIndex={category}
         onPress={(value) => {
-          setSelectedIndex(value);
+          setCategory(value);
         }}
         containerStyle={{
           backgroundColor: 'white',
@@ -47,37 +154,13 @@ export default function  GetAQuote ()  {
           backgroundColor: '#0B9F72',
         }}
       />
-      <Text style={{ padding: 10, marginTop: 20 }}>Are your items: </Text>
-      <CheckBox
-        checkedColor="#0B9F72"
-        containerStyle={styles.checkBoxContainer}
-        title="Pallets"
-        checked={check1}
-        onPress={() => setCheck1(!check1)}
-      />
-      <CheckBox
-        checkedColor="#0B9F72"
-        containerStyle={styles.checkBoxContainer}
-        title="Loose Cartons"
-        checked={check2}
-        onPress={() => setCheck2(!check2)}
-      />
+      <Text style={{ padding: 10 }}>Goods Description: </Text>
+      <TextInput
+        multiline
+        numberOfLines={4}
+        style={[styles.textInput,{height: 70}]}   
+        onChangeText={(v)=> {setQuote({...quoteData, Description: v});}}   />
 
-      <CheckBox
-        checkedColor="#0B9F72"
-        containerStyle={styles.checkBoxContainer}
-        title="Full Truck Load"
-        checked={check3}
-        onPress={() => setCheck3(!check3)}
-      />
-
-      <CheckBox
-        checkedColor="#0B9F72"
-        containerStyle={styles.checkBoxContainer}
-        title="Others (Mixed)"
-        checked={check4}
-        onPress={() => setCheck4(!check4)}
-      />
       <Text style={{ padding: 10 }}>Pieces: </Text>
       <TextInput
         style={styles.textInput}/>
@@ -102,7 +185,25 @@ export default function  GetAQuote ()  {
           style={styles.textInput2}
         />
       </View>
-      
+      <Text style={{ padding: 10 }}>Pickup City: </Text>
+      <TouchableOpacity style={[styles.textInput,{padding: 5}]} onPress={()=>{setIsPickup(true);setModalVisible(true);}}><Text>{pickUpCity===""?"Select City": pickUpCity}</Text></TouchableOpacity>
+     
+      <Text style={{ padding: 10 }}>Pickup Address: </Text>
+      <TextInput
+        multiline
+        numberOfLines={4}
+        style={[styles.textInput,{height: 70}]}
+        onChangeText={(v)=> {setQuote({...quoteData, PickUpAddress: v});}}
+      />
+      <Text style={{ padding: 10 }}>Dropoff City: </Text>
+      <TouchableOpacity style={[styles.textInput,{padding: 5}]} onPress={()=>{setIsPickup(false);setModalVisible(true);}}><Text>{dropOffCity===""?"Select City": dropOffCity}</Text></TouchableOpacity>
+      <Text style={{ padding: 10 }}>Dropoff Address: </Text>
+      <TextInput
+        multiline
+        numberOfLines={4}
+        style={[styles.textInput,{height: 70}]}
+        onChangeText={(v)=> {setQuote({...quoteData, DropoffAddress: v});}}
+        />
 
       <Text style={{ padding: 10 }}>
         Anything else you want to specify about your shipment:{' '}
@@ -114,18 +215,18 @@ export default function  GetAQuote ()  {
       />
       <Text style={{ padding: 10 }}>Temp Controlled/ Perishable Goods? </Text>
       <Picker
-        selectedValue={selectedValue}
+        selectedValue={type}
         style={[styles.textInput, {fontSize:12}]}
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
+        onValueChange={(itemValue, itemIndex) => setType(itemValue)}>
         <Picker.Item label="Please Specify" value="" />
         <Picker.Item label="Yes" value="yes" />
         <Picker.Item label="No" value="no" />
       </Picker>
       <Text style={{ padding: 10 }}>Do you need insurance? </Text>
       <Picker
-        selectedValue={selectedValue}
+        selectedValue={insurance}
         style={[styles.textInput, {fontSize:12}]}
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
+        onValueChange={(itemValue, itemIndex) => setInsurance(itemValue)}>
         <Picker.Item label="Please Specify" value="" />
         <Picker.Item label="Yes" value="yes" />
         <Picker.Item label="No" value="no" />
@@ -133,9 +234,9 @@ export default function  GetAQuote ()  {
       <Text style={{ padding: 10 }}>Are you a? </Text>
       <ButtonGroup
         buttons={['Private Customer', 'Business Customer']}
-        selectedIndex={selectedIndex1}
+        selectedIndex={customerType}
         onPress={(value) => {
-          setSelectedIndex1(value);
+          setCustomerType(value);
         }}
         containerStyle={{
           backgroundColor: 'white',
@@ -157,12 +258,17 @@ export default function  GetAQuote ()  {
           borderRadius: 10,
           alignSelf: 'center',
           marginTop: 20,
-        }}>
-        <Text style={{ alignSelf: 'center', color: 'white' }}>Next</Text>
+        }}
+        onPress={postData}
+        
+        >
+        <Text style={{ alignSelf: 'center', color: 'white' }}>Save Quote</Text>
       </TouchableOpacity>
     </View>
     </View>
     </ScrollView>
+    
+    </View>
   );
 }
 
@@ -202,5 +308,36 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     padding: 0,
     backgroundColor: 'white',  
-  }
+  },
+  centeredView: {
+    width: "100%",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22, 
+    
+  },
+  modalView: {
+    margin: 10,
+    backgroundColor: "white",
+    borderRadius: 20,
+    width: "100%",
+    padding: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  countryLabel: {
+    width: "100%",
+    padding: 10,
+    backgroundColor: 'lightgreen',
+    margin: 1,
+    borderRadius: 10,
+  },
 });
