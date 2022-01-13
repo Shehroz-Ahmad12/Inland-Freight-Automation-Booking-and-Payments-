@@ -3,7 +3,7 @@ import {Text, View, StyleSheet, ImageBackground,
   TouchableOpacity,
   TextInput,
   Picker,
-  ScrollView
+  ScrollView, ToastAndroid
 } from 'react-native';
 
 import { StripeProvider } from '@stripe/stripe-react-native';
@@ -79,8 +79,6 @@ export default function Payment ({navigation, route})  {
     
   };
   
-
-
 
 //   const handlePayments = async() => {
 //     const response = await fetch("https://api.stripe.com/v1/create-payment-intent",{

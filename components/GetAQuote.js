@@ -4,7 +4,7 @@ import {Text, View, StyleSheet, ImageBackground,
   TextInput,
   Picker,
   ScrollView,
-  Modal, FlatList
+  Modal, FlatList, ToastAndroid
 } from 'react-native';
 import { ButtonGroup } from 'react-native-elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -51,7 +51,7 @@ export default function  GetAQuote ({navigation})  {
         JSON.stringify(item)
       );
       console.log('Saving Done!');
-      navigation.goBack();
+      
     };
   
     const LoadData = async () => {
@@ -62,7 +62,13 @@ export default function  GetAQuote ({navigation})  {
       console.log('Loading Done!');
     };
   
-
+    const showToastWithGravity = () => {
+      ToastAndroid.showWithGravity(
+        "Quote Saved",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER
+      );
+    };
 
 
   const getCitiesData = async () => {
@@ -301,7 +307,7 @@ export default function  GetAQuote ({navigation})  {
           alignSelf: 'center',
           marginTop: 20,
         }}
-        onPress={SaveQuote}
+        onPress={()=>{SaveQuote();showToastWithGravity();}}
         
         >
         <Text style={{ alignSelf: 'center', color: 'white' }}>Save Quote</Text>
