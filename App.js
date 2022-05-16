@@ -30,7 +30,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { CardField, useConfirmPayment } from '@stripe/stripe-react-native';
 
-import logo from './assets/Falas.png';
+import logo from './assets/IFLA-06.png';
 
 import Payment from './components/Payment';
 import GetAQuote from './components/GetAQuote';
@@ -61,8 +61,9 @@ const Booking = ({ navigation, route }) => {
       <View>
         <Image
           style={{
+            backgroundColor: "#E0EFF6",
             width: 350,
-            height: 350,
+            height: 320,
             alignSelf: 'center',
             marginBottom: 5,
           }}
@@ -127,7 +128,7 @@ const DriverBookings = ({ navigation }) => {
         <Image
           style={{
             width: 350,
-            height: 350,
+            height: 320,
             alignSelf: 'center',
             marginBottom: 5,
           }}
@@ -141,26 +142,24 @@ const DriverBookings = ({ navigation }) => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                style={styles.mainButtons}
+            
+            <TouchableOpacity
+                style={{
+                  backgroundColor: '#068E94',
+                  padding: 40,
+                  width: '93%',
+                  margin: 10,
+                }}
                 onPress={() => {
-                  console.log('Find Jobs');
-                  navigation.push('Find Jobs', driver);
+                  navigation.push('My Jobs', driver);
                 }}>
-                <Text style={styles.mainButtonText}>Find Jobs</Text>
+                <Text style={styles.mainButtonText}>My Assignments</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.mainButtons}
-                onPress={() => navigation.push('My Jobs', driver)}>
-                <Text style={styles.mainButtonText}>My Jobs</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
+
               <TouchableOpacity
                 style={{
-                  backgroundColor: '#0B9F72',
+                  backgroundColor: '#068E94',
                   padding: 40,
                   width: '93%',
                   margin: 10,
@@ -170,7 +169,7 @@ const DriverBookings = ({ navigation }) => {
                 }}>
                 <Text style={styles.mainButtonText}>My Completed Bookings</Text>
               </TouchableOpacity>
-            </View>
+            
           </View>
         </View>
       </View>
@@ -199,7 +198,7 @@ function BookingStack() {
       headerTintColor: 'white',
       headerTitleAlign: 'center',
       headerTitleStyle: {fontWeight: 'bold', fontSize: 24},
-      headerStyle: { backgroundColor: '#0B9F72', padding: 0 }}}>
+      headerStyle: { backgroundColor: '#005761', padding: 0 }}}>
       <Stack.Screen name="Booking" component={Booking} options={{headerShown: false}} />
       <Stack.Screen name="Book Now" component={BookNow} />
       <Stack.Screen name="Get a Quote" component={GetAQuote} />
@@ -220,7 +219,7 @@ function DriverStack() {
       headerTintColor: 'white',
       headerTitleAlign: 'center',
       headerTitleStyle: {fontWeight: 'bold', fontSize: 24},
-      headerStyle: { backgroundColor: '#0B9F72', padding: 0 }}}>
+      headerStyle: { backgroundColor: '#068E94', padding: 0 }}}>
       <Stack.Screen name="Driver Bookings" component={DriverBookings}  options={{headerShown: false}}/>
       <Stack.Screen name="Find Jobs" component={FindJobs} />
       <Stack.Screen name="Apply Job" component={ApplyJob} />
@@ -250,7 +249,7 @@ function PaymentStack() {
       headerTintColor: 'white',
       headerTitleAlign: 'center',
       headerTitleStyle: {fontWeight: 'bold'},
-      headerStyle: { backgroundColor: '#0B9F72', padding: 0 }}}>
+      headerStyle: { backgroundColor: '#068E94', padding: 0 }}}>
       <Stack.Screen name="My Payments" component={PendingPayments} options={{headerShown: false}}/>
       <Stack.Screen name="Payment Details" component={Payment} />
     </Stack.Navigator>
@@ -279,7 +278,7 @@ export default function App() {
 const styles = StyleSheet.create({
   
   mainButtons: {
-    backgroundColor: '#0B9F72',
+    backgroundColor: '#068E94',
     padding: 40,
     width: '45%',
     margin: 10,
